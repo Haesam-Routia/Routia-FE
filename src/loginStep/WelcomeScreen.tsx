@@ -5,9 +5,6 @@ interface WelcomeScreenProps {
   onSignupClick?: () => void;
 }
 
-/**
- * 로고 이미지 경로(logo-icon.png)는 실제 자산 경로로 교체하세요.
- */
 export default function WelcomeScreen({
   onLoginClick,
   onSignupClick,

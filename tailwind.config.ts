@@ -7,6 +7,7 @@ export default {
         mainColor: "#ffe8ec",
         mainLightColor: "#FFF4F6",
         buttonColor: "#FF5D7B",
+        buttonPressedColor: "#4C4C4C",
       },
       // 폰트 설정 추가
       fontFamily: {

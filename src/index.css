@@ -1,2 +1,8 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
+
+/* Hide the clear button in IE/Edge */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
