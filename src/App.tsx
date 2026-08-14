@@ -7,6 +7,15 @@ import OnboardingCompleteScreen from "./onboarding/OnboardingCompleteScreen";
 import AiPlanLoadingScreen from "./onboarding/AiPlanLoadingScreen";
 import AiPlanDoneScreen from "./onboarding/AiPlanDoneScreen";
 import AuthScreen from "./Authscreen/Authscreen";
+import ProfileNameScreen from "./onboarding/ProfileNameScreen";
+import Step1UserInfo from "./onboarding/Step1UserInfo";
+import AddressScreen from "./onboarding/AddressScreen";
+import Step2SkinConcern from "./onboarding/Step2SkinConcern";
+import Step3Difficulty from "./onboarding/Step3Difficulty";
+import ProfileEditBody from "./edit/ProfileEditBody";
+import ProfileEditSkin from "./edit/ProfileEditSkin";
+import ProfileEditRoutine from "./edit/ProfileEditRoutine";
+import ProfileEditAlarm from "./edit/ProfileEditAlarm";
 
 export default function App() {
   return (
@@ -16,12 +25,20 @@ export default function App() {
         <Route path="/login" element={<AuthScreen />} />
         <Route path="/signup" element={<AuthScreen />} />
         <Route path="/signup/password" element={<SignupScreen />} />
-
         <Route path="/login/complete" element={<LoginCompleteScreen />} />
         <Route path="/signup/complete" element={<SignupCompleteScreen />} />
         <Route path="/onboarding" element={<OnboardingCompleteScreen />} />
         <Route path="/onboarding/loading" element={<AiPlanLoadingScreen />} />
         <Route path="/onboarding/done" element={<AiPlanDoneScreen />} />
+        <Route path="/onboarding/profile" element={<ProfileNameScreen />} />
+        <Route path="/onboarding/step1" element={<Step1UserInfo />} />
+        <Route path="/onboarding/address" element={<AddressScreen />} />
+        <Route path="/onboarding/step2" element={<Step2SkinConcern />} />
+        <Route path="/onboarding/step3" element={<Step3Difficulty />} />
+        <Route path="/edit/body" element={<ProfileEditBody />} />
+        <Route path="/edit/skin" element={<ProfileEditSkin />} />
+        <Route path="/edit/routine" element={<ProfileEditRoutine />} />
+        <Route path="/edit/notification" element={<ProfileEditAlarm />} />
       </Routes>
     </BrowserRouter>
   );

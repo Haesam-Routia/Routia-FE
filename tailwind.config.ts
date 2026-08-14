@@ -10,6 +10,12 @@ export default {
         buttonPressedColor: "#4C4C4C",
         inputBorder: "#ECECEC",
         inputon: "#FFF1F3",
+        textColor: "#252525",
+        subtextColor : "#7C7C7C",
+        lineColor: "#DDDDDD",
+        starColor: "#CE0000",
+        editbuttonColor: "#FFB5BF",
+        editbuttonBorder: "#FF8E9E",
       },
       // 폰트 설정 추가
       fontFamily: {
