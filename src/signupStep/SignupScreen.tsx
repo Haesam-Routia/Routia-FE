@@ -2,6 +2,7 @@ import { type FormEvent, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AgreeItem, inputClass, sideBtnClass } from "../components/common";
 import eyeImg from "../assets/routia-verify-eye.svg";
+import LogoText from "../assets/routia-text-img.svg";
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function SignupScreen() {
   // 비밀번호: 영문 대문자 + 숫자 + 특수문자 + 10자 이상
   const pwValid = useMemo(
     () =>
-      password.length >= 10 &&
+      password.length >= 8 &&
       /[A-Z]/.test(password) &&
       /[0-9]/.test(password) &&
       /[^a-zA-Z0-9]/.test(password),
@@ -37,40 +38,83 @@ export default function SignupScreen() {
   };
 
   return (
-    <div className="flex min-h-screen w-full justify-center bg-gradient-to-b from-rose-100 via-pink-50 to-white px-6 pb-12 pt-[86px]">
+    <div className="flex min-h-screen w-full justify-center bg-white  px-6 pb-12 pt-[86px]">
       <form onSubmit={handleSubmit} className="flex h-fit w-[363px] flex-col">
-        <div className="flex flex-col rounded-xl bg-white px-[22px] py-[17px] shadow-sm">
-          <h1 className="mb-[33px] text-center text-base font-bold text-neutral-900">
-            회원가입
-          </h1>
+        <div className="flex h-fit w-full flex-col rounded-xl bg-white px-2 py-[17px]">
+          <img src={LogoText} alt="로고" className="h-15 mb-10" />
 
           <div className="flex flex-col gap-2.5">
             <input
-              type="text" value={nickname} readOnly className={`${inputClass} bg-neutral-100`}/>
+              type="text"
+              value={nickname}
+              readOnly
+              className={`${inputClass} bg-neutral-100`}
+            />
             <div className="flex gap-2">
-              <input type="email" value={email} readOnly className={`${inputClass} flex-1 bg-neutral-100`}/>
-              <button type="button" disabled className="flex h-9 w-[95px] shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] bg-buttonPressedColor text-xs font-semibold text-white">
-                인증번호 받기
+              <input
+                type="email"
+                value={email}
+                readOnly
+                className={`${inputClass} flex-1 bg-neutral-100`}
+              />
+              <button
+                type="button"
+                disabled
+                className="flex h-12.5 w-[95px] shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] bg-buttonPressedColor text-xs font-semibold text-white"
+              >
+                인증 완료
               </button>
             </div>
 
             <div className="relative">
-              <input type={showPw ? "text" : "password"} placeholder="비밀번호 (영문 대문자+숫자+특수문자 10자이상)" value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputClass} pr-10 placeholder:text-xs`}/>
-              <button type="button" onClick={() => setShowPw((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2">
-                <img src={eyeImg} alt="비밀번호 표시" className={`h-5 w-5 ${showPw ? "" : "opacity-40"}`}/>
+              <input
+                type={showPw ? "text" : "password"}
+                placeholder="비밀번호 (영문 대문자+숫자+특수문자 8자이상)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`${inputClass} pr-10 `}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPw((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <img
+                  src={eyeImg}
+                  alt="비밀번호 표시"
+                  className={`h-5 w-5 ${showPw ? "" : "opacity-40"}`}
+                />
               </button>
             </div>
 
             <div className="relative">
-              <input type={showPwConfirm ? "text" : "password"} placeholder="비밀번호 확인" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} className={`${inputClass} pr-10`}/>
-              <button type="button" onClick={() => setShowPwConfirm((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2">
-                <img src={eyeImg} alt="비밀번호 표시" className={`h-5 w-5 ${showPwConfirm ? "" : "opacity-40"}`}/>
+              <input
+                type={showPwConfirm ? "text" : "password"}
+                placeholder="비밀번호 확인"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                className={`${inputClass} pr-10`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPwConfirm((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <img
+                  src={eyeImg}
+                  alt="비밀번호 표시"
+                  className={`h-5 w-5 ${showPwConfirm ? "" : "opacity-40"}`}
+                />
               </button>
             </div>
 
             {passwordConfirm.length > 0 && (
-              <p className={`text-xs ${pwMatch ? "text-emerald-500" : "text-rose-500"}`}>
-                {pwMatch ? "비밀번호가 일치합니다" : "비밀번호가 일치하지 않습니다"}
+              <p
+                className={`text-xs ${pwMatch ? "text-emerald-500" : "text-rose-500"}`}
+              >
+                {pwMatch
+                  ? "비밀번호가 일치합니다"
+                  : "비밀번호가 일치하지 않습니다"}
               </p>
             )}
 
@@ -85,20 +129,30 @@ export default function SignupScreen() {
 
               <AgreeItem
                 checked={agree.terms}
-                onChange={(v) => setAgree((a) => ({ ...a, terms: v }))}>
+                onChange={(v) => setAgree((a) => ({ ...a, terms: v }))}
+              >
                 [필수] 이용약관 및 개인정보처리방침
               </AgreeItem>
 
               <AgreeItem
                 checked={agree.marketing}
-                onChange={(v) => setAgree((a) => ({ ...a, marketing: v }))}>
+                onChange={(v) => setAgree((a) => ({ ...a, marketing: v }))}
+              >
                 [선택] 마케팅 정보 수집 및 수신 동의
               </AgreeItem>
             </div>
           </div>
         </div>
 
-        <button type="submit" disabled={!canSubmit} className="mt-[50px] w-full rounded-xl bg-buttonColor py-3.5 text-sm font-semibold text-white">
+        <button
+          type="submit"
+          disabled={!canSubmit}
+          className={`mt-[50px] w-full rounded-xl py-3.5 text-sm font-semibold transition-colors ${
+            !canSubmit
+              ? "bg-buttonPressedColor text-white cursor-not-allowed" // 비활성화 스타일
+              : "bg-buttonColor text-white cursor-pointer hover:opacity-90" // 활성화 스타일
+          }`}
+        >
           가입하기
         </button>
       </form>

@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 
 // 입력창
 export const inputClass =
-  "w-full h-9 px-3 py-2.5 rounded-[10px] border border-neutral-200 bg-neutral-50 " +
+  "w-full h-9 px-3 py-6 rounded-[10px] border border-neutral-200  " +
   "text-sm text-neutral-900 placeholder:text-neutral-400 " +
-  "focus:border-neutral-400 focus:bg-white focus:outline-none";
+  "focus:border-rose-100 focus:bg-white focus:outline-none";
 
 // 인증번호 받기 / 인증하기 버튼
 export const sideBtnClass =
@@ -29,7 +29,12 @@ export function AgreeItem({
 }) {
   return (
     <label className="flex cursor-pointer items-center gap-2 text-xs text-neutral-600">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only"/>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="peer sr-only"
+      />
       <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-neutral-300 text-sm font-bold leading-none text-transparent peer-checked:border-transparent peer-checked:text-buttonColor">
         ✓
       </span>
