@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../components/OnboardingLayout";
-import CheckItem from "./Checkitem";
+import CheckItem from "./CheckItem";
 import loadingImg from "../assets/routia-loading-bold.svg";
 
 const STEPS = [
@@ -24,15 +24,31 @@ export default function AiPlanLoadingScreen() {
     return () => clearTimeout(t);
   }, [doneCount, navigate]);
 
+  const [dots, setDots] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500); // 0.5초마다 점 개수 변경
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <OnboardingLayout>
-      <img src={loadingImg} alt="로딩 중" className="h-[100px] w-[100px] animate-spin" />
+      <img
+        src={loadingImg}
+        alt="로딩 중"
+        className="h-[100px] w-[100px] animate-[spin_2s_linear_infinite]"
+      />
 
       <h1 className="text-lg font-bold text-neutral-900">
         AI 플랜을 생성하고 있어요
       </h1>
+
+      {/* dots 변수를 뒤에 붙여줍니다 */}
       <p className="text-xs text-neutral-500">
-        입력하신 정보를 분석해 맞춤 루틴을 준비 중입니다...
+        입력하신 정보를 분석해 맞춤 루틴을 준비 중입니다{dots}
       </p>
 
       <ul className="mt-2 flex w-full flex-col gap-3 rounded-xl border border-neutral-200 p-4 text-left">

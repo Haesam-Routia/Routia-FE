@@ -153,7 +153,7 @@ export default function SignupScreen() {
               : "bg-buttonColor text-white cursor-pointer hover:opacity-90" // 활성화 스타일
           }`}
         >
-          가입하기
+          {!canSubmit ? "비밀번호를 확인해주세요" : "가입하기"}
         </button>
       </form>
     </div>

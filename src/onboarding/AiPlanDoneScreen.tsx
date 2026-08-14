@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import CheckItem from "./Checkitem";
+import CheckItem from "./CheckItem";
 import checkImg from "../assets/routia-check-pink.svg";
-import OnboardingLayout, { OnboardingButton } from "../components/OnboardingLayout";
+import OnboardingLayout, {
+  OnboardingButton,
+} from "../components/OnboardingLayout";
 export default function AiPlanDoneScreen() {
   const navigate = useNavigate();
 
   return (
-    
     <OnboardingLayout>
       <img src={checkImg} alt="완료" className="h-[100px] w-[100px]" />
 
@@ -24,7 +25,7 @@ export default function AiPlanDoneScreen() {
         <CheckItem done>맞춤 루틴 생성</CheckItem>
       </ul>
 
-      <p className="mt-2 text-sm text-neutral-500">
+      <p className="mt-13 text-sm text-neutral-500">
         앞으로 루티아와 함께 목표를 달성해봐요!
       </p>
 
