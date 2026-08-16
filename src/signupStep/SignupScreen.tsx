@@ -109,12 +109,8 @@ export default function SignupScreen() {
             </div>
 
             {passwordConfirm.length > 0 && (
-              <p
-                className={`text-xs ${pwMatch ? "text-emerald-500" : "text-rose-500"}`}
-              >
-                {pwMatch
-                  ? "비밀번호가 일치합니다"
-                  : "비밀번호가 일치하지 않습니다"}
+              <p className={`text-xs ${pwMatch ? "text-emerald-500" : "text-rose-500"}`}>
+                {pwMatch ? "비밀번호가 일치합니다" : "비밀번호가 일치하지 않습니다"}
               </p>
             )}
 

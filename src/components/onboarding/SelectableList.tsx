@@ -61,11 +61,15 @@ export default function SelectableList({
                   : "border-ob-border bg-ob-surface hover:border-ob-primary hover:-translate-y-[1px]"
               }`}
             >
-              <p className={`text-[14px] font-bold ${selected ? "text-ob-primary-text" : "text-ob-ink"}`}>
+              <p
+                className={`text-[14px] font-bold ${selected ? "text-ob-primary-text" : "text-ob-ink"}`}
+              >
                 {opt.label}
               </p>
               {opt.desc && (
-                <p className={`mt-0.5 text-[12px] ${selected ? "text-ob-primary-deep" : "text-ob-ink-faint"}`}>
+                <p
+                  className={`mt-0.5 text-[12px] ${selected ? "text-ob-primary-deep" : "text-ob-ink-faint"}`}
+                >
                   {opt.desc}
                 </p>
               )}

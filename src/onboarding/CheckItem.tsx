@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 interface CheckItemProps {
-  done: boolean; 
+  done: boolean;
   children: ReactNode;
 }
 

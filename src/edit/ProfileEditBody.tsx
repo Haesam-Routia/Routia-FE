@@ -22,10 +22,8 @@ export default function ProfileEditBody() {
     detail: "",
   });
 
-  const set =
-    (k: "name" | "height" | "weight" | "age" | "gender" | "detail") =>
-    (v: string) =>
-      setForm((p) => ({ ...p, [k]: v }));
+  const set = (k: "name" | "height" | "weight" | "age" | "gender" | "detail") => (v: string) =>
+    setForm((p) => ({ ...p, [k]: v }));
 
   return (
     <EditLayout active="body">
@@ -46,15 +44,26 @@ export default function ProfileEditBody() {
 
       <GenderSelect
         options={[
-          { value: "female", label: "여성", icon: <img src={femaleIcon} alt="여성" className="h-[50px] w-[50px]" /> },
-          { value: "male", label: "남성", icon: <img src={maleIcon} alt="남성" className="h-[50px] w-[50px]" /> },
+          {
+            value: "female",
+            label: "여성",
+            icon: <img src={femaleIcon} alt="여성" className="h-[50px] w-[50px]" />,
+          },
+          {
+            value: "male",
+            label: "남성",
+            icon: <img src={maleIcon} alt="남성" className="h-[50px] w-[50px]" />,
+          },
         ]}
         value={form.gender}
         onChange={set("gender")}
       />
 
       <div className="flex w-full flex-col gap-3">
-        <RegionSelect value={form.region} onChange={(region) => setForm((p) => ({ ...p, region }))} />
+        <RegionSelect
+          value={form.region}
+          onChange={(region) => setForm((p) => ({ ...p, region }))}
+        />
         <input
           type="text"
           value={form.detail}

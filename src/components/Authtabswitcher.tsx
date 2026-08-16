@@ -7,10 +7,7 @@ interface AuthTabSwitcherProps {
   onChange?: (tab: Tab) => void;
 }
 
-export default function AuthTabSwitcher({
-  defaultTab = "signup",
-  onChange,
-}: AuthTabSwitcherProps) {
+export default function AuthTabSwitcher({ defaultTab = "signup", onChange }: AuthTabSwitcherProps) {
   const [activeTab, setActiveTab] = useState<Tab>(defaultTab);
 
   const handleSelect = (tab: Tab) => {
@@ -22,9 +19,7 @@ export default function AuthTabSwitcher({
     <div className="relative flex w-full rounded-full bg-rose-50 p-1">
       <div
         className={`absolute inset-y-1 w-[calc(50%-8px)] rounded-full bg-buttonColor transition-transform duration-300 ease-out ${
-          activeTab === "signup"
-            ? "translate-x-[calc(100%+8px)]"
-            : "translate-x-0"
+          activeTab === "signup" ? "translate-x-[calc(100%+8px)]" : "translate-x-0"
         }`}
       />
 

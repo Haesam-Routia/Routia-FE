@@ -42,9 +42,7 @@ export default function AiPlanLoadingScreen() {
         className="h-[100px] w-[100px] animate-[spin_2s_linear_infinite]"
       />
 
-      <h1 className="text-lg font-bold text-neutral-900">
-        AI 플랜을 생성하고 있어요
-      </h1>
+      <h1 className="text-lg font-bold text-neutral-900">AI 플랜을 생성하고 있어요</h1>
 
       {/* dots 변수를 뒤에 붙여줍니다 */}
       <p className="text-xs text-neutral-500">

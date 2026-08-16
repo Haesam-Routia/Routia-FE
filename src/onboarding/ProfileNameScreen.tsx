@@ -13,12 +13,12 @@ export default function ProfileNameScreen() {
       title="프로필을 작성해주세요!"
       description={
         <>
-        <p className="mt-2 text-sm font-bold text-textColor">
-          온보딩 시작 전 프로필을 작성해주세요!
-        </p>
+          <p className="mt-2 text-sm font-bold text-textColor">
+            온보딩 시작 전 프로필을 작성해주세요!
+          </p>
           <p className="text-sm text-subtextColor">
-          (<span className="text-buttonColor">*</span>항목은 필수 항목입니다)
-        </p>
+            (<span className="text-buttonColor">*</span>항목은 필수 항목입니다)
+          </p>
         </>
       }
       onNext={() => {
@@ -27,7 +27,12 @@ export default function ProfileNameScreen() {
       }}
     >
       <img src={profileImg} alt="프로필" className="h-[154px] w-[154px] self-center" />
-      <TextField label="이름" placeholder="어떻게 불러드리면 될까요?" value={name} onChange={setName} />
+      <TextField
+        label="이름"
+        placeholder="어떻게 불러드리면 될까요?"
+        value={name}
+        onChange={setName}
+      />
     </ProfileLayout>
   );
 }

@@ -21,9 +21,7 @@ export default function GenderSelect({
 }: GenderSelectProps) {
   return (
     <div>
-      {label && (
-        <label className="text-[15.5px] font-extrabold text-ob-ink">{label}</label>
-      )}
+      {label && <label className="text-[15.5px] font-extrabold text-ob-ink">{label}</label>}
 
       <div className="mt-3 flex gap-3">
         {options.map((opt) => {
@@ -41,9 +39,7 @@ export default function GenderSelect({
             >
               {opt.icon && <span className="text-2xl">{opt.icon}</span>}
               <span
-                className={`text-sm font-bold ${
-                  selected ? "text-ob-primary-text" : "text-ob-ink"
-                }`}
+                className={`text-sm font-bold ${selected ? "text-ob-primary-text" : "text-ob-ink"}`}
               >
                 {opt.label}
               </span>

@@ -1,5 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { ScoreHeader, SummaryCards, StreakCard, WeeklyTrendCard, HistoryCard } from "../components/score";
+import {
+  ScoreHeader,
+  SummaryCards,
+  StreakCard,
+  WeeklyTrendCard,
+  HistoryCard,
+} from "../components/score";
 
 export default function ScorePage() {
   const navigate = useNavigate();

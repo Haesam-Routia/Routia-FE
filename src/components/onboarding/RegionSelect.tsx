@@ -37,9 +37,13 @@ export default function RegionSelect({
           value={value.sido}
           onChange={(e) => onChange({ sido: e.target.value, sigungu: "" })}
         >
-          <option value="" disabled>시/도</option>
+          <option value="" disabled>
+            시/도
+          </option>
           {SIDO_LIST.map((sido) => (
-            <option key={sido} value={sido}>{sido}</option>
+            <option key={sido} value={sido}>
+              {sido}
+            </option>
           ))}
         </select>
 
@@ -50,9 +54,13 @@ export default function RegionSelect({
           onChange={(e) => onChange({ ...value, sigungu: e.target.value })}
           disabled={!value.sido}
         >
-          <option value="" disabled>시/군/구</option>
+          <option value="" disabled>
+            시/군/구
+          </option>
           {sigunguList.map((sgg) => (
-            <option key={sgg} value={sgg}>{sgg}</option>
+            <option key={sgg} value={sgg}>
+              {sgg}
+            </option>
           ))}
         </select>
       </div>

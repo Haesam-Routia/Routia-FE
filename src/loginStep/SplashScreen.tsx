@@ -29,9 +29,7 @@ export default function SplashScreen() {
           onClick={handleStart}
           className="w-full h-14 px-4 py-3.5 bg-buttonColor rounded-xl flex justify-center items-center mt-8 cursor-pointer hover:opacity-90 active:scale-98 transition-all"
         >
-          <span className="text-white text-base font-semibold">
-            지금 시작하기
-          </span>
+          <span className="text-white text-base font-semibold">지금 시작하기</span>
         </button>
       </div>
     </div>

@@ -42,14 +42,7 @@ export function UvIcon({ className = "" }: { className?: string }) {
         <line x1="3" y1="22" x2="8" y2="22" />
         <line x1="36" y1="22" x2="41" y2="22" />
       </g>
-      <text
-        x="22"
-        y="36"
-        textAnchor="middle"
-        fontSize="16"
-        fontWeight="700"
-        fill="#FF8A00"
-      >
+      <text x="22" y="36" textAnchor="middle" fontSize="16" fontWeight="700" fill="#FF8A00">
         UV
       </text>
     </svg>

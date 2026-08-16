@@ -59,9 +59,7 @@ export default function SignupForm() {
           onChange={(e) => setNickname(e.target.value)}
           className={inputClass}
         />
-        <p className="text-xs text-buttonPressedColor mt-2">
-          성을 포함하여 입력해주세요.
-        </p>
+        <p className="text-xs text-buttonPressedColor mt-2">성을 포함하여 입력해주세요.</p>
 
         <div className="flex gap-2 mt-6 mb-2">
           <input
@@ -133,17 +131,11 @@ export default function SignupForm() {
         <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/20 px-6 backdrop-blur-sm">
           <div className="flex h-[284px] w-[282px] flex-col items-center justify-center rounded-xl bg-white px-6 text-center shadow-lg">
             <img src={checkImg} alt="완료" className="h-[68px] w-[68px]" />
-            <p className="mt-4 text-sm font-semibold text-neutral-900">
-              인증이 완료되었습니다!
-            </p>
-            <p className="mt-1 text-xs text-neutral-500">
-              회원가입을 이어서 진행해주세요.
-            </p>
+            <p className="mt-4 text-sm font-semibold text-neutral-900">인증이 완료되었습니다!</p>
+            <p className="mt-1 text-xs text-neutral-500">회원가입을 이어서 진행해주세요.</p>
             <button
               type="button"
-              onClick={() =>
-                navigate("/signup/password", { state: { nickname, email } })
-              }
+              onClick={() => navigate("/signup/password", { state: { nickname, email } })}
               className="mt-6 h-[50px] w-[202px] rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
             >
               회원가입으로 돌아가기

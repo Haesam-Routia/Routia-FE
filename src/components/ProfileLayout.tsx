@@ -3,12 +3,12 @@ import loadingBar from "../assets/routia-loadingbar.svg";
 import { NextButton } from "./onboarding";
 
 interface StepLayoutProps {
-  title: ReactNode;          
-  description?: ReactNode;   
-  showBar?: boolean;     
-  children: ReactNode;      
-  buttonText?: string;       
-  onNext?: () => void;      
+  title: ReactNode;
+  description?: ReactNode;
+  showBar?: boolean;
+  children: ReactNode;
+  buttonText?: string;
+  onNext?: () => void;
 }
 
 export default function StepLayout({
@@ -21,7 +21,9 @@ export default function StepLayout({
 }: StepLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col px-6 pb-6 w-full">
-      {showBar && <img src={loadingBar} alt="진행 상태" className="mt-2 h-[7px] w-[362px] self-center" />}
+      {showBar && (
+        <img src={loadingBar} alt="진행 상태" className="mt-2 h-[7px] w-[362px] self-center" />
+      )}
 
       <h1 className="mt-[17px] text-2xl font-bold text-textColor">{title}</h1>
       {description && (

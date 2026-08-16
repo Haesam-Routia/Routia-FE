@@ -1,6 +1,7 @@
 import { summary } from "../../data/score";
 
-const boxClass = "flex h-[63px] flex-1 flex-col justify-center rounded-[18px] border border-lineColor bg-white pl-[15px] pr-4";
+const boxClass =
+  "flex h-[63px] flex-1 flex-col justify-center rounded-[18px] border border-lineColor bg-white pl-[15px] pr-4";
 
 export default function SummaryCards() {
   return (
@@ -17,7 +18,9 @@ export default function SummaryCards() {
 
       <div className={boxClass}>
         <p className="text-[11px] font-normal text-[#424242]">평균 완료 항목</p>
-        <span className="mt-0.5 text-[18px] font-semibold text-textColor">{summary.avgCompleted}개</span>
+        <span className="mt-0.5 text-[18px] font-semibold text-textColor">
+          {summary.avgCompleted}개
+        </span>
       </div>
     </div>
   );

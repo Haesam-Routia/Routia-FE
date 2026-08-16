@@ -23,7 +23,9 @@ export default function TextField({
         <label className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-[5px]">
           {label}
           {required && <span className="text-ob-primary font-extrabold">*</span>}
-          {hint && <span className="ml-1 text-[11.8px] font-semibold text-ob-ink-faint">{hint}</span>}
+          {hint && (
+            <span className="ml-1 text-[11.8px] font-semibold text-ob-ink-faint">{hint}</span>
+          )}
         </label>
       )}
       <input

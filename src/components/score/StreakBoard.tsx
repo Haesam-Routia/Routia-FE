@@ -6,13 +6,12 @@ import successCircle from "../../assets/routia-success-circle.svg";
 
 interface StreakBoardProps {
   current: number;
-  successCount?: number; 
+  successCount?: number;
 }
 
-
-const ROW1 = [30, 76, 122, 168, 214, 260]; 
-const ROW2 = [290, 246, 202, 158, 114, 70]; 
-const ROW3 = [70, 114, 158, 202, 246, 290]; 
+const ROW1 = [30, 76, 122, 168, 214, 260];
+const ROW2 = [290, 246, 202, 158, 114, 70];
+const ROW3 = [70, 114, 158, 202, 246, 290];
 
 export default function StreakBoard({ current, successCount = 1 }: StreakBoardProps) {
   return (
@@ -36,10 +35,17 @@ export default function StreakBoard({ current, successCount = 1 }: StreakBoardPr
 
       {ROW2.map((x, i) =>
         i < successCount ? (
-          <image key={`s2${i}`} href={successCircle} x={x - 10.5} y={120 - 10.5} width="21" height="21" />
+          <image
+            key={`s2${i}`}
+            href={successCircle}
+            x={x - 10.5}
+            y={120 - 10.5}
+            width="21"
+            height="21"
+          />
         ) : (
           <image key={`d2${i}`} href={dot} x={x - 8.5} y={120 - 8.5} width="17" height="17" />
-        )
+        ),
       )}
       {ROW3.map((x, i) => (
         <image key={`d3${i}`} href={dot} x={x - 8.5} y={184 - 8.5} width="17" height="17" />

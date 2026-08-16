@@ -21,8 +21,19 @@ export default function AllTasksSheet({ onClose }: AllTasksSheetProps) {
             오늘 할 일(<span className="text-[#FF1C46]">{progress.done}</span>/{progress.total})
           </h3>
           <button type="button" aria-label="닫기" onClick={onClose} className="p-1">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 5L15 15M15 5L5 15" stroke="#4C4C4C" strokeWidth="1.6" strokeLinecap="round" />
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 5L15 15M15 5L5 15"
+                stroke="#4C4C4C"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>

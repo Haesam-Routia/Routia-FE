@@ -4,7 +4,6 @@ interface AchieveModalProps {
   onClose?: () => void;
 }
 
-
 export default function AchieveModal({ onClose }: AchieveModalProps) {
   return (
     <div className="mt-[78px] fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm">

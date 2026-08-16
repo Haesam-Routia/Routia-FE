@@ -4,7 +4,15 @@ import EditLayout from "../components/EditLayout";
 const pad = (n: number) => String(n).padStart(2, "0");
 const ITEM_H = 36;
 
-function Wheel({ count, value, onChange }: { count: number; value: number; onChange: (n: number) => void }) {
+function Wheel({
+  count,
+  value,
+  onChange,
+}: {
+  count: number;
+  value: number;
+  onChange: (n: number) => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const timer = useRef<number>(0);
 
@@ -70,18 +78,30 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       onClick={onToggle}
       className={`h-[28px] w-[52px] rounded-full p-[3px] transition-colors ${on ? "bg-buttonColor" : "bg-neutral-300"}`}
     >
-      <div className={`h-[22px] w-[22px] rounded-full bg-white transition-transform ${on ? "translate-x-[24px]" : ""}`} />
+      <div
+        className={`h-[22px] w-[22px] rounded-full bg-white transition-transform ${on ? "translate-x-[24px]" : ""}`}
+      />
     </button>
   );
 }
 
-function TimeBox({ time, active, onClick }: { time: { h: number; m: number }; active: boolean; onClick: () => void }) {
+function TimeBox({
+  time,
+  active,
+  onClick,
+}: {
+  time: { h: number; m: number };
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`h-[36px] w-[70px] rounded-lg border text-sm transition-colors ${
-        active ? "border-buttonColor bg-mainLightColor text-buttonColor" : "border-lineColor bg-white text-textColor"
+        active
+          ? "border-buttonColor bg-mainLightColor text-buttonColor"
+          : "border-lineColor bg-white text-textColor"
       }`}
     >
       {pad(time.h)}:{pad(time.m)}
@@ -105,9 +125,17 @@ export default function ProfileEditAlarm() {
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold text-textColor">사용시간</span>
         <div className="flex items-center gap-2">
-          <TimeBox time={start} active={open === "start"} onClick={() => setOpen(open === "start" ? null : "start")} />
+          <TimeBox
+            time={start}
+            active={open === "start"}
+            onClick={() => setOpen(open === "start" ? null : "start")}
+          />
           <span className="text-sm text-textColor">~</span>
-          <TimeBox time={end} active={open === "end"} onClick={() => setOpen(open === "end" ? null : "end")} />
+          <TimeBox
+            time={end}
+            active={open === "end"}
+            onClick={() => setOpen(open === "end" ? null : "end")}
+          />
         </div>
       </div>
 

@@ -61,28 +61,18 @@ export default function LoginForm() {
         onClick={handleSubmit}
         disabled={!isFilled || isSubmitting}
         className={`mt-6 flex h-12.5 w-full shrink-0 items-center justify-center rounded-[10px] text-sm font-semibold text-white ${
-          isFilled && !isSubmitting
-            ? "bg-buttonColor"
-            : "bg-buttonPressedColor opacity-50"
+          isFilled && !isSubmitting ? "bg-buttonColor" : "bg-buttonPressedColor opacity-50"
         }`}
       >
         {isSubmitting ? "로그인 중..." : "로그인"}
       </button>
 
       <div className="mt-4 flex items-center justify-center gap-2 text-xs text-buttonPressedColor">
-        <button
-          type="button"
-          onClick={() => navigate("/find-email")}
-          className="underline"
-        >
+        <button type="button" onClick={() => navigate("/find-email")} className="underline">
           이메일 찾기
         </button>
         <span>|</span>
-        <button
-          type="button"
-          onClick={() => navigate("/find-password")}
-          className="underline"
-        >
+        <button type="button" onClick={() => navigate("/find-password")} className="underline">
           비밀번호 찾기
         </button>
       </div>
