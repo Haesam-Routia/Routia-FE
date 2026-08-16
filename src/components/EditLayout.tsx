@@ -13,7 +13,7 @@ export default function EditLayout({ active, children, onSave }: EditLayoutProps
   const [saved, setSaved] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col px-6 pt-6 pb-6">
+    <div className="flex min-h-screen flex-col px-6 pt-6 pb-6 w-full">
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold text-textColor">정보수정</h1>

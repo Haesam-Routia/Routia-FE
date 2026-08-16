@@ -20,7 +20,7 @@ export default function StepLayout({
   onNext,
 }: StepLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col px-6 pb-6">
+    <div className="flex min-h-screen flex-col px-6 pb-6 w-full">
       {showBar && <img src={loadingBar} alt="진행 상태" className="mt-2 h-[7px] w-[362px] self-center" />}
 
       <h1 className="mt-[17px] text-2xl font-bold text-textColor">{title}</h1>

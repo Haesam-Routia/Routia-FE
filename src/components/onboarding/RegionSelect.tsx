@@ -13,7 +13,7 @@ interface RegionSelectProps {
 }
 
 const selectClass =
-  "h-[50px] flex-1 rounded-xl border border-neutral-200 bg-white px-4 text-sm text-gray-800 focus:border-buttonColor focus:outline-none";
+  "h-[50px] flex-1 rounded-ob-md border-[1.5px] border-ob-border bg-ob-bg px-4 text-[13.5px] font-semibold text-ob-ink focus:border-ob-primary focus:bg-ob-surface focus:outline-none transition-colors appearance-none";
 
 export default function RegionSelect({
   label = "거주 지역",
@@ -25,12 +25,12 @@ export default function RegionSelect({
 
   return (
     <div>
-      <label className="text-sm font-semibold text-textColor">
+      <label className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-[5px]">
         {label}
-        {required && <span className="text-buttonColor">*</span>}
+        {required && <span className="text-ob-primary font-extrabold">*</span>}
       </label>
 
-      <div className="mt-2 flex gap-2">
+      <div className="mt-3 flex gap-2">
         {/* 시도 선택 */}
         <select
           className={selectClass}

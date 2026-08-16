@@ -6,7 +6,7 @@ interface OnboardingLayoutProps {
 
 export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
   return (
-    <div className="flex min-h-screen w-full justify-center bg-white px-6 py-12 mt-35">
+    <div className="flex min-h-screen w-full flex-col items-center bg-white px-6 py-12 pt-47">
       <div className="flex w-full flex-col items-center gap-4 text-center">
         {children}
       </div>
