@@ -10,4 +10,5 @@ export { default as SideMenu } from "./SideMenu";
 export { default as WeeklyCalendar } from "./WeeklyCalendar";
 export { default as AllTasksSheet } from "./AllTasksSheet";
 export { default as CompleteModal } from "./CompleteModal";
+export { default as TodayDirectionCard } from "./TodayDirectionCard";
 export { SunIcon, UvIcon } from "./WeatherIcons";

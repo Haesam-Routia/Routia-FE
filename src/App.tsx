@@ -21,6 +21,7 @@ import HomeMenuPage from "./home/HomeMenuPage";
 import HomeCalendarPage from "./home/HomeCalendarPage";
 import HomeTasksPage from "./home/HomeTasksPage";
 import HomeCompletePage from "./home/HomeCompletePage";
+import HomeDirectionPage from "./home/HomeDirectionPage";
 import ScorePage from "./score/ScorePage";
 import ScoreAchievePage from "./score/ScoreAchievePage";
 
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/home/calendar" element={<HomeCalendarPage />} />
         <Route path="/home/tasks" element={<HomeTasksPage />} />
         <Route path="/home/complete" element={<HomeCompletePage />} />
+        <Route path="/home/direction" element={<HomeDirectionPage />} />
         <Route path="/score" element={<ScorePage />} />
         <Route path="/score/achieve" element={<ScoreAchievePage />} />
       </Routes>

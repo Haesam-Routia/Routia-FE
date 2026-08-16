@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { PhoneFrame, HomeBase } from "../components/home";
+import { PhoneFrame, HomeBase, TodayDirectionCard } from "../components/home";
 
-export default function HomePage() {
+// 동기부여 버튼 누름 → 오늘의 방향 카드
+export default function HomeDirectionPage() {
   const navigate = useNavigate();
   return (
     <PhoneFrame>
@@ -9,8 +10,8 @@ export default function HomePage() {
         onMenuClick={() => navigate("/home/menu")}
         onDateClick={() => navigate("/home/calendar")}
         onViewAllTasks={() => navigate("/home/tasks")}
-        onProgressDetail={() => navigate("/home/direction")}
       />
+      <TodayDirectionCard onClose={() => navigate("/home")} />
     </PhoneFrame>
   );
 }
