@@ -24,12 +24,11 @@ import HomeCompletePage from "./home/HomeCompletePage";
 import HomeDirectionPage from "./home/HomeDirectionPage";
 import ScorePage from "./score/ScorePage";
 import ScoreAchievePage from "./score/ScoreAchievePage";
+import CoachPage from "./coach/CoachPage";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-black/5">
-      <div className="mx-auto w-full max-w-[402px] min-h-screen">
       <Routes>
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<AuthScreen />} />
@@ -41,12 +40,10 @@ export default function App() {
         <Route path="/onboarding/loading" element={<AiPlanLoadingScreen />} />
         <Route path="/onboarding/done" element={<AiPlanDoneScreen />} />
         <Route path="/onboarding/profile" element={<ProfileNameScreen />} />
-
         <Route path="/onboarding/step1" element={<Step1UserInfo />} />
         <Route path="/onboarding/address" element={<AddressScreen />} />
         <Route path="/onboarding/step2" element={<Step2SkinConcern />} />
         <Route path="/onboarding/step3" element={<Step3Difficulty />} />
-
         <Route path="/edit/body" element={<ProfileEditBody />} />
         <Route path="/edit/skin" element={<ProfileEditSkin />} />
         <Route path="/edit/routine" element={<ProfileEditRoutine />} />
@@ -59,9 +56,8 @@ export default function App() {
         <Route path="/home/direction" element={<HomeDirectionPage />} />
         <Route path="/score" element={<ScorePage />} />
         <Route path="/score/achieve" element={<ScoreAchievePage />} />
+        <Route path="/coach" element={<CoachPage />} />
       </Routes>
-      </div>
-      </div>
     </BrowserRouter>
   );
 }

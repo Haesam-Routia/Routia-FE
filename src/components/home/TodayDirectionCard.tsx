@@ -1,4 +1,14 @@
 import { todayDirection } from "../../data/home";
+import sunglassesFace from "../../assets/routia-Sunglasses-face.svg";
+import morning from "../../assets/routia-morning.svg";
+import afternoon from "../../assets/routia-afternoon.svg";
+import moon from "../../assets/routia-moon.svg";
+
+const sectionIcon: Record<string, string> = {
+  오전: morning,
+  오후: afternoon,
+  밤: moon,
+};
 
 interface TodayDirectionCardProps {
   onClose?: () => void;
@@ -12,7 +22,7 @@ export default function TodayDirectionCard({ onClose }: TodayDirectionCardProps)
         <p className="text-[16px] font-medium text-textColor">오늘의 방향</p>
 
         <div className="mt-6 flex justify-center">
-          <span className="text-[100px] leading-none">{d.emoji}</span>
+          <img src={sunglassesFace} alt="" className="h-[117px] w-[117px]" />
         </div>
 
         <h2 className="mt-4 text-center text-lg font-bold text-textColor">{d.heading}</h2>
@@ -22,7 +32,7 @@ export default function TodayDirectionCard({ onClose }: TodayDirectionCardProps)
           {d.sections.map((s) => (
             <div key={s.period} className="flex gap-3">
               <div className="flex w-9 shrink-0 flex-col items-center gap-1 pt-0.5">
-                <span className="text-2xl leading-none">{s.icon}</span>
+                <img src={sectionIcon[s.period]} alt="" className="h-8 w-auto" />
                 <span className="text-[11px] text-subtextColor">{s.period}</span>
               </div>
               <ul className="flex flex-1 flex-col gap-1.5 pt-1">
