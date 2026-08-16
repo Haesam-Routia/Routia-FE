@@ -7,3 +7,4 @@ export type { RegionValue } from "./RegionSelect";
 export { default as MultiChipSelect } from "./MultiChipSelect";
 export { default as SelectableList } from "./SelectableList";
 export type { SelectableOption } from "./SelectableList";
+export { default as OnboardingShell } from "./OnboardingShell";

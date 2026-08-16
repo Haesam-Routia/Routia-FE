@@ -11,7 +11,7 @@ export default function SplashScreen() {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-white px-6">
-      <div className="flex w-full max-w-sm flex-col items-center text-center">
+      <div className="flex w-full flex-col items-center text-center">
         <div className="mt-40">
           <img src={logo} alt="로고" className="w-[114px] h-[158px]" />
           <img src={logoText} alt="로고" className="w-[100px] h-[40px]" />

@@ -19,7 +19,7 @@ export default function AuthScreen() {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
 
   return (
-    <div className="flex min-h-screen w-full justify-center bg-white px-6 pb-12 pt-[86px]">
+    <div className="flex min-h-screen w-full flex-col bg-white px-6 pb-12 pt-[86px]">
       <div className="flex h-fit w-full flex-col rounded-xl bg-white px-2 py-[17px]">
         <img src={LogoText} alt="로고" className="h-15 mb-10" />
 

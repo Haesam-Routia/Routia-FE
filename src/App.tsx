@@ -24,6 +24,7 @@ import HomeCompletePage from "./home/HomeCompletePage";
 import HomeDirectionPage from "./home/HomeDirectionPage";
 import ScorePage from "./score/ScorePage";
 import ScoreAchievePage from "./score/ScoreAchievePage";
+import CoachPage from "./coach/CoachPage";
 
 export default function App() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/home/direction" element={<HomeDirectionPage />} />
         <Route path="/score" element={<ScorePage />} />
         <Route path="/score/achieve" element={<ScoreAchievePage />} />
+        <Route path="/coach" element={<CoachPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import { type FormEvent, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AgreeItem, inputClass, sideBtnClass } from "../components/common";
+import { AgreeItem, inputClass } from "../components/common";
 import eyeImg from "../assets/routia-verify-eye.svg";
 import LogoText from "../assets/routia-text-img.svg";
 
@@ -38,8 +38,8 @@ export default function SignupScreen() {
   };
 
   return (
-    <div className="flex min-h-screen w-full justify-center bg-white  px-6 pb-12 pt-[86px]">
-      <form onSubmit={handleSubmit} className="flex h-fit w-[363px] flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-white px-6 pb-12 pt-[86px]">
+      <form onSubmit={handleSubmit} className="flex h-fit w-full flex-col">
         <div className="flex h-fit w-full flex-col rounded-xl bg-white px-2 py-[17px]">
           <img src={LogoText} alt="로고" className="h-15 mb-10" />
 
