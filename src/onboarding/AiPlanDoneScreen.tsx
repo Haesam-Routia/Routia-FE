@@ -18,7 +18,7 @@ export default function AiPlanDoneScreen() {
         AI 맞춤형 안티에이징 루틴을 시작해보세요
       </p>
 
-      <ul className="mt-2 flex w-full flex-col gap-3 rounded-xl border border-neutral-200 p-4 text-left">
+      <ul className="mt-2 flex w-full flex-col gap-3 rounded-xl border border-lineColor p-4 text-left">
         <CheckItem done>신체정보 및 니즈 분석</CheckItem>
         <CheckItem done>피부 타입 및 난이도 반영</CheckItem>
         <CheckItem done>날씨·계절 데이터 결합</CheckItem>

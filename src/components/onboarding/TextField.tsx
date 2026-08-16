@@ -31,7 +31,7 @@ export default function TextField({
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         placeholder={placeholder}
-        className={`mt-2 h-[50px] rounded-xl border border-neutral-200 bg-white px-4 text-gray-800 placeholder:text-gray-400 focus:border-buttonColor focus:bg-inputon focus:outline-none ${
+        className={`mt-2 h-[50px] rounded-xl border border-lineColor bg-white px-4 text-gray-800 placeholder:text-gray-400 focus:border-buttonColor focus:bg-inputon focus:outline-none ${
           fullWidth ? "w-full" : "w-[320px]"
         }`}
       />

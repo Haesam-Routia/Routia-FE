@@ -41,7 +41,7 @@ export default function MultiChipSelect({
               className={`rounded-xl border text-sm transition-colors ${itemClassName} ${
                 selected
                   ? "border-buttonColor bg-mainLightColor font-semibold text-buttonColor"
-                  : "border-neutral-200 bg-white text-gray-700"
+                  : "border-lineColor bg-white text-gray-700"
               }`}
             >
               {opt}

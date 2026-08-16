@@ -9,11 +9,9 @@ interface SelectableListProps {
   required?: boolean;
   hint?: string;
   options: SelectableOption[];
-  /** true면 복수 선택, false면 단일 선택 */
   multiple?: boolean;
   value: string[];
   onChange: (v: string[]) => void;
-  /** 각 항목 크기 (기본 전체폭). 예: "w-[359px] h-[60px]" */
   itemClassName?: string;
 }
 
@@ -54,7 +52,7 @@ export default function SelectableList({
               type="button"
               onClick={() => toggle(opt.value)}
               className={`flex flex-col justify-center rounded-xl border px-4 text-left transition-colors ${itemClassName} ${
-                selected ? "border-buttonColor bg-mainLightColor" : "border-neutral-200 bg-white"
+                selected ? "border-buttonColor bg-mainLightColor" : "border-lineColor bg-white"
               }`}
             >
               <p className={`text-sm ${selected ? "font-semibold text-buttonColor" : "text-gray-800"}`}>

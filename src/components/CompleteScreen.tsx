@@ -27,7 +27,7 @@ export default function CompleteScreen({
       <button
         type="button"
         onClick={() => navigate(to)}
-        className="mt-10 h-[50px] w-[294px] rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
+        className="mt-[20px] h-[50px] w-[294px] rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
       >
         {buttonLabel}
       </button>

@@ -13,7 +13,7 @@ interface RegionSelectProps {
 }
 
 const selectClass =
-  "h-[50px] flex-1 rounded-xl border border-neutral-200 bg-white px-4 text-sm text-gray-800 focus:border-buttonColor focus:outline-none";
+  "h-[50px] flex-1 rounded-xl border border-lineColor bg-white px-4 text-sm text-gray-800 focus:border-buttonColor focus:outline-none";
 
 export default function RegionSelect({
   label = "거주 지역",
@@ -31,7 +31,6 @@ export default function RegionSelect({
       </label>
 
       <div className="mt-2 flex gap-2">
-        {/* 시도 선택 */}
         <select
           className={selectClass}
           value={value.sido}
@@ -43,7 +42,6 @@ export default function RegionSelect({
           ))}
         </select>
 
-        {/* 시군구 선택 (시도 선택 전엔 비활성) */}
         <select
           className={selectClass}
           value={value.sigungu}

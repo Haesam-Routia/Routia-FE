@@ -51,7 +51,7 @@ export default function AiPlanLoadingScreen() {
         입력하신 정보를 분석해 맞춤 루틴을 준비 중입니다{dots}
       </p>
 
-      <ul className="mt-2 flex w-full flex-col gap-3 rounded-xl border border-neutral-200 p-4 text-left">
+      <ul className="mt-2 flex w-full flex-col gap-3 rounded-xl border border-lineColor p-4 text-left">
         {STEPS.map((label, i) => (
           <CheckItem key={label} done={i < doneCount}>
             {label}

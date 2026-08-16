@@ -4,14 +4,12 @@ import EditLayout from "../components/EditLayout";
 const pad = (n: number) => String(n).padStart(2, "0");
 const ITEM_H = 36;
 
-/* 휠 컬럼 (스크롤 스냅으로 가운데 값 선택) */
 function Wheel({ count, value, onChange }: { count: number; value: number; onChange: (n: number) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const timer = useRef<number>(0);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = value * ITEM_H;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleScroll = () => {
@@ -54,8 +52,7 @@ function WheelTimePicker({
   onChange: (t: { h: number; m: number }) => void;
 }) {
   return (
-    <div className="relative flex w-[140px] items-center justify-center rounded-xl border border-neutral-200 bg-white py-1 shadow-md">
-      {/* 가운데 선택 표시선 */}
+    <div className="relative flex w-[140px] items-center justify-center rounded-xl border border-lineColor bg-white py-1 shadow-md">
       <div className="pointer-events-none absolute inset-x-2 top-1/2 h-[36px] -translate-y-1/2 rounded-md bg-mainLightColor" />
       <div className="relative flex items-center gap-1">
         <Wheel count={24} value={time.h} onChange={(h) => onChange({ ...time, h })} />
@@ -66,7 +63,6 @@ function WheelTimePicker({
   );
 }
 
-/* on/off 토글 */
 function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
@@ -79,14 +75,13 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   );
 }
 
-/* 시간 표시 박스 */
 function TimeBox({ time, active, onClick }: { time: { h: number; m: number }; active: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`h-[36px] w-[70px] rounded-lg border text-sm transition-colors ${
-        active ? "border-buttonColor bg-mainLightColor text-buttonColor" : "border-neutral-200 bg-white text-textColor"
+        active ? "border-buttonColor bg-mainLightColor text-buttonColor" : "border-lineColor bg-white text-textColor"
       }`}
     >
       {pad(time.h)}:{pad(time.m)}
@@ -102,13 +97,11 @@ export default function ProfileEditAlarm() {
 
   return (
     <EditLayout active="noti">
-      {/* 사용여부 */}
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold text-textColor">사용여부</span>
         <Toggle on={enabled} onToggle={() => setEnabled((v) => !v)} />
       </div>
 
-      {/* 사용시간 */}
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold text-textColor">사용시간</span>
         <div className="flex items-center gap-2">
@@ -118,7 +111,6 @@ export default function ProfileEditAlarm() {
         </div>
       </div>
 
-      {/* 휠 피커 (선택된 시간 박스 아래) */}
       {open && (
         <div className="flex w-full justify-end">
           <WheelTimePicker

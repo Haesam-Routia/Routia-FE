@@ -16,6 +16,13 @@ import ProfileEditBody from "./edit/ProfileEditBody";
 import ProfileEditSkin from "./edit/ProfileEditSkin";
 import ProfileEditRoutine from "./edit/ProfileEditRoutine";
 import ProfileEditAlarm from "./edit/ProfileEditAlarm";
+import HomePage from "./home/HomePage";
+import HomeMenuPage from "./home/HomeMenuPage";
+import HomeCalendarPage from "./home/HomeCalendarPage";
+import HomeTasksPage from "./home/HomeTasksPage";
+import HomeCompletePage from "./home/HomeCompletePage";
+import ScorePage from "./score/ScorePage";
+import ScoreAchievePage from "./score/ScoreAchievePage";
 
 export default function App() {
   return (
@@ -39,6 +46,13 @@ export default function App() {
         <Route path="/edit/skin" element={<ProfileEditSkin />} />
         <Route path="/edit/routine" element={<ProfileEditRoutine />} />
         <Route path="/edit/notification" element={<ProfileEditAlarm />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/home/menu" element={<HomeMenuPage />} />
+        <Route path="/home/calendar" element={<HomeCalendarPage />} />
+        <Route path="/home/tasks" element={<HomeTasksPage />} />
+        <Route path="/home/complete" element={<HomeCompletePage />} />
+        <Route path="/score" element={<ScorePage />} />
+        <Route path="/score/achieve" element={<ScoreAchievePage />} />
       </Routes>
     </BrowserRouter>
   );

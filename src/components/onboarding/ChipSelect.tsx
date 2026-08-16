@@ -4,7 +4,6 @@ interface ChipSelectProps {
   options: string[];
   value?: string;
   onChange?: (v: string) => void;
-  /** 버튼 크기 등 (예: "w-[60px] h-[41px]") */
   itemClassName?: string;
 }
 
@@ -36,7 +35,7 @@ export default function ChipSelect({
               className={`rounded-xl border text-sm transition-colors ${itemClassName} ${
                 selected
                   ? "border-buttonColor bg-mainLightColor font-semibold text-buttonColor"
-                  : "border-neutral-200 bg-white text-gray-700"
+                  : "border-lineColor bg-white text-gray-700"
               }`}
             >
               {opt}

@@ -19,7 +19,7 @@ export default function InfoEditTabs({ active }: { active: string }) {
           className={`h-[41px] rounded-xl border px-4 text-sm transition-colors ${
             active === t.key
               ? "border-editbuttonBorder bg-editbuttonColor font-semibold text-text"
-              : "border-neutral-200 bg-white text-gray-700"
+              : "border-lineColor bg-white text-gray-700"
           }`}
         >
           {t.label}

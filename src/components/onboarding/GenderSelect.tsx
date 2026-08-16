@@ -34,7 +34,7 @@ export default function GenderSelect({
               type="button"
               onClick={() => onChange?.(opt.value)}
               className={`flex h-[100px] w-[100px] flex-col items-center justify-center gap-1 rounded-xl border transition-colors ${
-                selected ? "border-buttonColor bg-mainLightColor" : "border-neutral-200 bg-white"
+                selected ? "border-buttonColor bg-mainLightColor" : "border-lineColor bg-white"
               }`}
             >
               {opt.icon && <span className="text-2xl">{opt.icon}</span>}
