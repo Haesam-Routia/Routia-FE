@@ -7,10 +7,6 @@ interface AuthTabSwitcherProps {
   onChange?: (tab: Tab) => void;
 }
 
-/**
- * 로그인 / 회원가입 슬라이드 탭 스위처.
- * 선택된 탭 뒤로 코랄핑크 필(pill)이 슬라이드 애니메이션으로 이동합니다.
- */
 export default function AuthTabSwitcher({
   defaultTab = "signup",
   onChange,
@@ -24,7 +20,6 @@ export default function AuthTabSwitcher({
 
   return (
     <div className="relative flex w-full rounded-full bg-rose-50 p-1">
-      {/* 슬라이딩 배경 필 */}
       <div
         className={`absolute inset-y-1 w-[calc(50%-8px)] rounded-full bg-buttonColor transition-transform duration-300 ease-out ${
           activeTab === "signup"

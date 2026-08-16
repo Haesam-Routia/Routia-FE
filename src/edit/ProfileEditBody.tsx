@@ -60,7 +60,7 @@ export default function ProfileEditBody() {
           value={form.detail}
           onChange={(e) => set("detail")(e.target.value)}
           placeholder="상세 주소"
-          className="h-[38px] w-[320px] rounded-xl border border-neutral-200 bg-white px-4 text-gray-800 placeholder:text-gray-400 focus:border-buttonColor focus:bg-inputon focus:outline-none"
+          className="h-[38px] w-[320px] rounded-xl border border-lineColor bg-white px-4 text-gray-800 placeholder:text-gray-400 focus:border-buttonColor focus:bg-inputon focus:outline-none"
         />
       </div>
     </EditLayout>

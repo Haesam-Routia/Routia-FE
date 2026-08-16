@@ -50,6 +50,8 @@ export default {
           "Roboto",
           "sans-serif",
         ],
+        // 위클리 달력 등 Inter 지정용
+        inter: ["Inter", "sans-serif"],
       },
     },
   },

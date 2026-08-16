@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 // 입력창
 export const inputClass =
-  "w-full h-9 px-3 py-6 rounded-[10px] border border-neutral-200  " +
+  "w-full h-9 px-3 py-6 rounded-[10px] border border-lineColor  " +
   "text-sm text-neutral-900 placeholder:text-neutral-400 " +
   "focus:border-rose-100 focus:bg-white focus:outline-none";
 
