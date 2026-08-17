@@ -1,114 +1,127 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChipSelect, SelectableList, OnboardingShell } from "../components/onboarding";
 
 export default function Step3Difficulty() {
   const navigate = useNavigate();
-  const [difficulty, setDifficulty] = useState<string[]>([]);
+  const [difficulty, setDifficulty] = useState("");
   const [timePref, setTimePref] = useState("");
 
+  const difficultyOptions = [
+    { value: "complex", label: "루틴이 복잡해도 괜찮아요", desc: "자세한 단계별 루틴 (12개 생성)", level: "Lv.3", emoji: "" },
+    { value: "medium", label: "너무 복잡한 건 싫어요", desc: "핵심 단계만 간단하게 (6~7개 생성)", level: "Lv.2", emoji: "" },
+    { value: "simple", label: "단순했으면 좋겠어요", desc: "최소한의 루틴만 (3개 생성)", level: "Lv.1", emoji: "" },
+  ];
+
+  const timeOptions = ["아침형", "저녁형", "상관없음"];
+
   return (
-    <OnboardingShell
-      step={3}
-      eyebrow="피부 프로필 만들기"
-      title={
-        <>
-          루틴 난이도를
-          <br />
-          설정해주세요
-        </>
-      }
-      subtitle={
-        <>
-          개인 맞춤 루틴 추천을 위해 난이도를 설정해주세요.{" "}
-          <b className="text-ob-ink font-bold">*</b> 표시는 필수 항목이에요.
-        </>
-      }
-      onNext={() => {
-        console.log("3단계:", { difficulty: difficulty[0], timePref });
-        navigate("/onboarding");
-      }}
-      onBack={() => navigate(-1 as never)}
-    >
-      {/* 루틴 난이도 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              루틴 난이도<span className="text-ob-primary">*</span>
-            </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              원하는 루틴 복잡도를 선택해주세요
-            </p>
-          </div>
+    <div className="relative flex w-full flex-col bg-white min-h-screen">
+      {/* 상단 네비 */}
+      <div className="flex items-center gap-3 px-5 pt-4 pb-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => navigate(-1 as never)}
+          className="w-8 h-8 flex items-center justify-center"
+        >
+          <svg className="w-5 h-5 text-textColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <div className="flex-1 h-1 rounded-full bg-neutral-100 overflow-hidden">
+          <div className="h-full w-3/4 rounded-full bg-buttonColor transition-all duration-500" />
         </div>
-        <SelectableList
-          options={[
-            {
-              value: "complex",
-              label: "루틴이 복잡해도 괜찮아요",
-              desc: "자세한 단계별 루틴을 원해요 (12개의 루틴 생성)",
-            },
-            {
-              value: "medium",
-              label: "루틴이 너무 복잡한건 싫어요",
-              desc: "핵심 단계만 간단하게 원해요 (6~7개의 루틴 생성)",
-            },
-            {
-              value: "simple",
-              label: "루틴이 단순했으면 좋겠어요",
-              desc: "최소한의 루틴만 원해요 (3개의 루틴 생성)",
-            },
-          ]}
-          value={difficulty}
-          onChange={setDifficulty}
-          itemClassName="w-full py-4"
-        />
+        <span className="text-xs font-medium text-subtextColor">3/4</span>
       </div>
 
-      {/* 루틴 선호 시간대 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-          </div>
+      {/* 타이틀 */}
+      <div className="px-6 pt-4 pb-2">
+        <h1 className="text-[22px] font-bold text-textColor leading-snug">
+          루틴 난이도를 설정해주세요
+        </h1>
+        <p className="mt-1.5 text-[13px] text-subtextColor">
+          나에게 맞는 루틴 복잡도를 선택해주세요
+        </p>
+      </div>
+
+      {/* 콘텐츠 */}
+      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-[100px]">
+        <div className="flex flex-col gap-7">
+          {/* 루틴 난이도 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              루틴 선호 시간대<span className="text-ob-primary">*</span>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              루틴 난이도 <span className="text-buttonColor">*</span>
             </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              루틴 수행을 원하는 시간대를 선택하세요
+            <div className="flex flex-col gap-2.5">
+              {difficultyOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setDifficulty(opt.value)}
+                  className={`w-full rounded-xl border px-4 py-3.5 text-left transition-all active:scale-[0.98] flex items-center gap-3 ${
+                    difficulty === opt.value
+                      ? "border-buttonColor bg-[#FFF1F3]"
+                      : "border-neutral-200 bg-white"
+                  }`}
+                >
+                  <span className={`shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-md ${
+                    difficulty === opt.value
+                      ? "bg-buttonColor text-white"
+                      : "bg-neutral-100 text-subtextColor"
+                  }`}>
+                    {opt.level}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-[14px] font-semibold ${difficulty === opt.value ? "text-buttonColor" : "text-textColor"}`}>
+                      {opt.label}
+                    </p>
+                    <p className={`mt-0.5 text-[12px] ${difficulty === opt.value ? "text-buttonColor/70" : "text-subtextColor"}`}>
+                      {opt.desc}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-sm">{opt.emoji}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 루틴 선호 시간대 */}
+          <div>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              선호 시간대 <span className="text-buttonColor">*</span>
             </p>
+            <div className="flex gap-2">
+              {timeOptions.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => setTimePref(opt)}
+                  className={`h-10 flex-1 rounded-xl text-[13px] font-semibold transition-all active:scale-95 ${
+                    timePref === opt
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <ChipSelect
-          options={["아침형", "저녁형", "상관없음"]}
-          value={timePref}
-          onChange={setTimePref}
-        />
       </div>
-    </OnboardingShell>
+
+      {/* 하단 버튼 */}
+      <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
+        <button
+          type="button"
+          onClick={() => {
+            console.log("3단계:", { difficulty, timePref });
+            navigate("/onboarding");
+          }}
+          className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          <span className="text-white text-base font-semibold">다음으로</span>
+        </button>
+      </div>
+    </div>
   );
 }

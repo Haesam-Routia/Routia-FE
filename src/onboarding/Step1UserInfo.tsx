@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  TextField,
-  ChipSelect,
-  GenderSelect,
-  RegionSelect,
-  OnboardingShell,
-  type RegionValue,
-} from "../components/onboarding";
+import { RegionSelect, type RegionValue } from "../components/onboarding";
 import femaleIcon from "../assets/routia-gender-female.svg";
 import maleIcon from "../assets/routia-gender-male.svg";
 
@@ -25,172 +18,156 @@ export default function Step1UserInfo() {
   const set = (key: "height" | "weight" | "age" | "gender" | "detail") => (v: string) =>
     setForm((prev) => ({ ...prev, [key]: v }));
 
+  const ages = ["10대", "20대", "30대", "40대", "50대"];
+
   return (
-    <OnboardingShell
-      step={1}
-      eyebrow="피부 프로필 만들기"
-      title={
-        <>
-          사용자 정보를
-          <br />
-          입력해주세요
-        </>
-      }
-      subtitle={
-        <>
-          개인 맞춤 루틴 추천을 위해 신체 정보를 입력해주세요.{" "}
-          <b className="text-ob-ink font-bold">*</b> 표시는 필수 항목이에요.
-        </>
-      }
-      onNext={() => navigate("/onboarding/step2")}
-      onBack={() => navigate(-1 as never)}
-    >
-      {/* 섹션: 신체 정보 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2v20M2 12h20" />
-            </svg>
-          </div>
+    <div className="relative flex w-full flex-col bg-white min-h-screen">
+      {/* 상단 네비 */}
+      <div className="flex items-center gap-3 px-5 pt-4 pb-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => navigate(-1 as never)}
+          className="w-8 h-8 flex items-center justify-center"
+        >
+          <svg className="w-5 h-5 text-textColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <div className="flex-1 h-1 rounded-full bg-neutral-100 overflow-hidden">
+          <div className="h-full w-1/4 rounded-full bg-buttonColor transition-all duration-500" />
+        </div>
+        <span className="text-xs font-medium text-subtextColor">1/4</span>
+      </div>
+
+      {/* 타이틀 */}
+      <div className="px-6 pt-4 pb-2">
+        <h1 className="text-[22px] font-bold text-textColor leading-snug">
+          사용자 정보를 입력해주세요
+        </h1>
+        <p className="mt-1.5 text-[13px] text-subtextColor">
+          맞춤 루틴 추천을 위한 기본 정보예요
+        </p>
+      </div>
+
+      {/* 콘텐츠 */}
+      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-[100px]">
+        <div className="flex flex-col gap-7">
+          {/* 키 + 몸무게 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">신체 정보</p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              키와 몸무게를 입력해주세요
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              신체 정보 <span className="text-buttonColor">*</span>
             </p>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={form.height}
+                  onChange={(e) => set("height")(e.target.value)}
+                  placeholder="키"
+                  className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+                />
+                <span className="mt-1 block text-[11px] text-subtextColor pl-1">cm</span>
+              </div>
+              <div className="flex-1">
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={form.weight}
+                  onChange={(e) => set("weight")(e.target.value)}
+                  placeholder="몸무게"
+                  className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+                />
+                <span className="mt-1 block text-[11px] text-subtextColor pl-1">kg</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <TextField
-            label="키"
-            placeholder="165.5 cm"
-            value={form.height}
-            onChange={set("height")}
-            fullWidth
-          />
-          <TextField
-            label="몸무게"
-            placeholder="55.5 kg"
-            value={form.weight}
-            onChange={set("weight")}
-            fullWidth
-          />
-        </div>
-      </div>
 
-      {/* 섹션: 나이 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" />
-              <path d="M16 2v4M8 2v4M3 10h18" />
-            </svg>
-          </div>
+          {/* 나이대 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">나이대</p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">연령대를 선택해주세요</p>
-          </div>
-        </div>
-        <ChipSelect
-          required
-          options={["10대", "20대", "30대", "40대", "50대"]}
-          value={form.age}
-          onChange={set("age")}
-        />
-      </div>
-
-      {/* 섹션: 성별 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="8" r="5" />
-              <path d="M20 21a8 8 0 0 0-16 0" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">성별</p>
-          </div>
-        </div>
-        <GenderSelect
-          label=""
-          options={[
-            {
-              value: "female",
-              label: "여성",
-              icon: <img src={femaleIcon} alt="여성" className="h-[50px] w-[50px]" />,
-            },
-            {
-              value: "male",
-              label: "남성",
-              icon: <img src={maleIcon} alt="남성" className="h-[50px] w-[50px]" />,
-            },
-          ]}
-          value={form.gender}
-          onChange={set("gender")}
-        />
-      </div>
-
-      {/* 섹션: 거주 지역 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">거주 지역</p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              맞춤 서비스를 위한 지역 정보
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              나이대 <span className="text-buttonColor">*</span>
             </p>
+            <div className="flex gap-2">
+              {ages.map((age) => (
+                <button
+                  key={age}
+                  type="button"
+                  onClick={() => set("age")(age)}
+                  className={`h-10 flex-1 rounded-xl text-[13px] font-semibold transition-all ${
+                    form.age === age
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200 active:scale-95"
+                  }`}
+                >
+                  {age}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 성별 */}
+          <div>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">성별</p>
+            <div className="flex gap-3">
+              {[
+                { value: "female", label: "여성", icon: femaleIcon },
+                { value: "male", label: "남성", icon: maleIcon },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => set("gender")(opt.value)}
+                  className={`flex h-[60px] flex-1 items-center justify-center gap-2.5 rounded-xl border transition-all active:scale-95 ${
+                    form.gender === opt.value
+                      ? "border-buttonColor bg-[#FFF1F3] shadow-sm"
+                      : "border-neutral-200 bg-white"
+                  }`}
+                >
+                  <img src={opt.icon} alt={opt.label} className="h-7 w-7" />
+                  <span
+                    className={`text-sm font-semibold ${
+                      form.gender === opt.value ? "text-buttonColor" : "text-textColor"
+                    }`}
+                  >
+                    {opt.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 거주 지역 */}
+          <div>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              거주 지역 <span className="text-buttonColor">*</span>
+            </p>
+            <RegionSelect
+              label=""
+              value={form.region}
+              onChange={(region) => setForm((prev) => ({ ...prev, region }))}
+            />
+            <input
+              type="text"
+              value={form.detail}
+              onChange={(e) => set("detail")(e.target.value)}
+              placeholder="상세 주소 (선택)"
+              className="mt-2.5 h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+            />
           </div>
         </div>
-        <div className="flex flex-col gap-3 mt-3">
-          <RegionSelect
-            label=""
-            value={form.region}
-            onChange={(region) => setForm((prev) => ({ ...prev, region }))}
-          />
-          <input
-            type="text"
-            value={form.detail}
-            onChange={(e) => set("detail")(e.target.value)}
-            placeholder="상세 주소"
-            className="h-[50px] w-full rounded-ob-md border-[1.5px] border-ob-border bg-ob-bg px-4 text-[13.5px] font-semibold text-ob-ink placeholder:text-ob-ink-faint placeholder:font-medium focus:border-ob-primary focus:bg-ob-surface focus:outline-none transition-colors"
-          />
-        </div>
       </div>
-    </OnboardingShell>
+
+      {/* 하단 버튼 (스플래시/로그인과 동일 스타일) */}
+      <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
+        <button
+          type="button"
+          onClick={() => navigate("/onboarding/step2")}
+          className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          <span className="text-white text-base font-semibold">다음으로</span>
+        </button>
+      </div>
+    </div>
   );
 }

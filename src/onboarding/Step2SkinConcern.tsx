@@ -1,12 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ChipSelect,
-  MultiChipSelect,
-  SelectableList,
-  TextField,
-  OnboardingShell,
-} from "../components/onboarding";
 
 export default function Step2SkinConcern() {
   const navigate = useNavigate();
@@ -24,247 +17,227 @@ export default function Step2SkinConcern() {
   const update = <K extends keyof typeof form>(key: K, val: (typeof form)[K]) =>
     setForm((prev) => ({ ...prev, [key]: val }));
 
+  const toggleMulti = (key: "skinConcern" | "bodyConcern" | "goals" | "tools", val: string) => {
+    const arr = form[key] as string[];
+    update(key, arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
+  };
+
+  const skinTypes = ["건성", "중성", "지성", "복합성", "민감성", "수부지"];
+  const skinConcerns = ["탄력", "주름", "여드름", "색소", "모공", "피지"];
+  const toolOptions = [
+    { value: "absorb", label: "스킨케어 흡수 디바이스" },
+    { value: "body", label: "바디 근막이완 도구" },
+    { value: "face", label: "얼굴 근막이완 도구" },
+    { value: "peeling", label: "각질 제거 제품" },
+  ];
+  const bodyConcerns = ["붓기", "피로감", "체형 변화", "혈액순환"];
+  const goalOptions = ["근성장", "현상 유지", "체지방 줄이기", "습관 잡기"];
+
   return (
-    <OnboardingShell
-      step={2}
-      eyebrow="피부 프로필 만들기"
-      title={
-        <>
-          피부 고민 및<br />
-          니즈를 알려주세요
-        </>
-      }
-      subtitle={
-        <>
-          입력하신 정보로 <b className="text-ob-ink font-bold">나만의 루틴</b>을 설계해요.{" "}
-          <b className="text-ob-ink font-bold">*</b> 표시는 필수 항목이에요.
-        </>
-      }
-      onNext={() => {
-        console.log("2단계:", form);
-        navigate("/onboarding/step3");
-      }}
-      onBack={() => navigate(-1 as never)}
-    >
-      {/* 피부 타입 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2.5s7 7.2 7 12.2a7 7 0 1 1-14 0c0-5 7-12.2 7-12.2z" />
-            </svg>
-          </div>
+    <div className="relative flex w-full flex-col bg-white min-h-screen">
+      {/* 상단 네비 */}
+      <div className="flex items-center gap-3 px-5 pt-4 pb-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => navigate(-1 as never)}
+          className="w-8 h-8 flex items-center justify-center"
+        >
+          <svg className="w-5 h-5 text-textColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <div className="flex-1 h-1 rounded-full bg-neutral-100 overflow-hidden">
+          <div className="h-full w-2/4 rounded-full bg-buttonColor transition-all duration-500" />
+        </div>
+        <span className="text-xs font-medium text-subtextColor">2/4</span>
+      </div>
+
+      {/* 타이틀 */}
+      <div className="px-6 pt-4 pb-2">
+        <h1 className="text-[22px] font-bold text-textColor leading-snug">
+          피부 고민 및 니즈를 알려주세요
+        </h1>
+        <p className="mt-1.5 text-[13px] text-subtextColor">
+          맞춤 루틴 설계를 위한 정보예요
+        </p>
+      </div>
+
+      {/* 콘텐츠 */}
+      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-[100px]">
+        <div className="flex flex-col gap-7">
+          {/* 피부 타입 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              피부 타입<span className="text-ob-primary">*</span>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              피부 타입 <span className="text-buttonColor">*</span>
             </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              가장 가까운 타입 1개를 선택해주세요
-            </p>
+            <div className="flex flex-wrap gap-2">
+              {skinTypes.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => update("skinType", type)}
+                  className={`h-9 px-4 rounded-full text-[13px] font-semibold transition-all active:scale-95 ${
+                    form.skinType === type
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200"
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <ChipSelect
-          options={["건성", "중성", "지성", "복합성", "민감성", "수부지"]}
-          value={form.skinType}
-          onChange={(v) => update("skinType", v)}
-        />
-      </div>
 
-      {/* 피부 고민 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 20c4-3 8-6.5 8-11a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 4.5 6 8 10 11z" />
-            </svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              피부 고민<span className="text-ob-primary">*</span>
-            </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">복수 선택 가능</p>
-          </div>
-          {form.skinConcern.length > 0 && (
-            <span className="text-[11px] font-extrabold text-ob-primary-deep bg-ob-primary-softer px-2.5 py-1 rounded-full shrink-0">
-              {form.skinConcern.length}개 선택
-            </span>
-          )}
-        </div>
-        <MultiChipSelect
-          options={["탄력", "주름", "여드름", "색소", "모공", "피지"]}
-          value={form.skinConcern}
-          onChange={(v) => update("skinConcern", v)}
-        />
-      </div>
-
-      {/* 기존 사용 제품 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M9 2h6v3.2c0 .5.2 1 .5 1.4l1 1.2c.3.4.5.9.5 1.4V20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9.2c0-.5.2-1 .5-1.4l1-1.2c.3-.4.5-.9.5-1.4V2z" />
-              <path d="M7.5 13h9" />
-            </svg>
-          </div>
+          {/* 피부 고민 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">기존 사용 제품</p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">
-              제품마다 구분해주세요 (선택)
-            </p>
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[13px] font-semibold text-textColor">
+                피부 고민 <span className="text-buttonColor">*</span>
+              </p>
+              {form.skinConcern.length > 0 && (
+                <span className="text-[11px] font-bold text-buttonColor">{form.skinConcern.length}개 선택</span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {skinConcerns.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => toggleMulti("skinConcern", item)}
+                  className={`h-9 px-4 rounded-full text-[13px] font-semibold transition-all active:scale-95 ${
+                    form.skinConcern.includes(item)
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <TextField
-          required={false}
-          fullWidth
-          placeholder="예) 아누아 어성초 토너, 마데카소이드 메디힐 패드"
-          value={form.usedProducts}
-          onChange={(v) => update("usedProducts", v)}
-        />
-      </div>
 
-      {/* 보유 도구 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="3.2" />
-              <path d="M12 2.5v3M12 18.5v3M4.2 6.2l2.2 2.2M17.6 15.6l2.2 2.2M2.5 12h3M18.5 12h3M4.2 17.8l2.2-2.2M17.6 8.4l2.2-2.2" />
-            </svg>
-          </div>
+          {/* 기존 사용 제품 */}
           <div>
-            <p className="text-[15.5px] font-extrabold text-ob-ink">보유 도구</p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">복수 선택 가능 (선택)</p>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              기존 사용 제품 <span className="text-subtextColor font-normal">(선택)</span>
+            </p>
+            <input
+              type="text"
+              value={form.usedProducts}
+              onChange={(e) => update("usedProducts", e.target.value)}
+              placeholder="예) 아누아 어성초 토너, 메디힐 패드"
+              className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+            />
+          </div>
+
+          {/* 보유 도구 */}
+          <div>
+            <p className="text-[13px] font-semibold text-textColor mb-2.5">
+              보유 도구 <span className="text-subtextColor font-normal">(선택)</span>
+            </p>
+            <div className="flex flex-col gap-2">
+              {toolOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => toggleMulti("tools", opt.value)}
+                  className={`h-11 w-full rounded-xl border px-4 text-left text-[13px] font-semibold transition-all active:scale-[0.98] ${
+                    form.tools.includes(opt.value)
+                      ? "border-buttonColor bg-[#FFF1F3] text-buttonColor"
+                      : "border-neutral-200 bg-white text-textColor"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 신체 고민 */}
+          <div>
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[13px] font-semibold text-textColor">
+                신체 고민 <span className="text-buttonColor">*</span>
+              </p>
+              {form.bodyConcern.length > 0 && (
+                <span className="text-[11px] font-bold text-buttonColor">{form.bodyConcern.length}개 선택</span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {bodyConcerns.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => toggleMulti("bodyConcern", item)}
+                  className={`h-9 px-4 rounded-full text-[13px] font-semibold transition-all active:scale-95 ${
+                    form.bodyConcern.includes(item)
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              value={form.bodyConcernEtc}
+              onChange={(e) => update("bodyConcernEtc", e.target.value)}
+              placeholder="기타 의견 (선택)"
+              className="mt-2.5 h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+            />
+          </div>
+
+          {/* 이루고 싶은 목표 */}
+          <div>
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[13px] font-semibold text-textColor">
+                이루고 싶은 목표 <span className="text-buttonColor">*</span>
+              </p>
+              {form.goals.length > 0 && (
+                <span className="text-[11px] font-bold text-buttonColor">{form.goals.length}개 선택</span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {goalOptions.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => toggleMulti("goals", item)}
+                  className={`h-9 px-4 rounded-full text-[13px] font-semibold transition-all active:scale-95 ${
+                    form.goals.includes(item)
+                      ? "bg-buttonColor text-white shadow-sm"
+                      : "bg-neutral-50 text-subtextColor border border-neutral-200"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              value={form.goalsEtc}
+              onChange={(e) => update("goalsEtc", e.target.value)}
+              placeholder="기타 의견 (선택)"
+              className="mt-2.5 h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-textColor placeholder:text-neutral-400 focus:border-buttonColor focus:outline-none transition-colors"
+            />
           </div>
         </div>
-        <SelectableList
-          multiple
-          options={[
-            { value: "absorb", label: "스킨케어 흡수 디바이스" },
-            { value: "body", label: "바디 근막이완 도구" },
-            { value: "face", label: "얼굴 근막이완 도구" },
-            { value: "peeling", label: "각질 제거 제품" },
-          ]}
-          value={form.tools}
-          onChange={(v) => update("tools", v)}
-        />
       </div>
 
-      {/* 신체 고민 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="5" r="2.3" />
-              <path d="M12 8v6M12 14l-4 7M12 14l4 7M8 11l-3 2M16 11l3 2" />
-            </svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              신체 고민<span className="text-ob-primary">*</span>
-            </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">복수 선택 가능</p>
-          </div>
-          {form.bodyConcern.length > 0 && (
-            <span className="text-[11px] font-extrabold text-ob-primary-deep bg-ob-primary-softer px-2.5 py-1 rounded-full shrink-0">
-              {form.bodyConcern.length}개 선택
-            </span>
-          )}
-        </div>
-        <MultiChipSelect
-          options={["붓기", "피로감", "체형 변화", "혈액순환"]}
-          value={form.bodyConcern}
-          onChange={(v) => update("bodyConcern", v)}
-        />
-        <div className="mt-3">
-          <TextField
-            required={false}
-            fullWidth
-            placeholder="기타 의견을 적어주세요"
-            value={form.bodyConcernEtc}
-            onChange={(v) => update("bodyConcernEtc", v)}
-          />
-        </div>
+      {/* 하단 버튼 */}
+      <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
+        <button
+          type="button"
+          onClick={() => {
+            console.log("2단계:", form);
+            navigate("/onboarding/step3");
+          }}
+          className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          <span className="text-white text-base font-semibold">다음으로</span>
+        </button>
       </div>
-
-      {/* 이루고 싶은 목표 */}
-      <div className="bg-ob-surface border border-ob-border rounded-ob-lg p-5 shadow-ob-card">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-[11px] bg-gradient-to-br from-ob-primary-softer to-ob-primary-soft flex items-center justify-center shrink-0">
-            <svg
-              className="w-4 h-4 stroke-ob-primary-deep"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="8.5" />
-              <circle cx="12" cy="12" r="4.3" />
-              <circle cx="12" cy="12" r="1" />
-            </svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[15.5px] font-extrabold text-ob-ink flex items-center gap-1">
-              이루고 싶은 목표<span className="text-ob-primary">*</span>
-            </p>
-            <p className="text-[11.8px] text-ob-ink-faint font-semibold">복수 선택 가능</p>
-          </div>
-          {form.goals.length > 0 && (
-            <span className="text-[11px] font-extrabold text-ob-primary-deep bg-ob-primary-softer px-2.5 py-1 rounded-full shrink-0">
-              {form.goals.length}개 선택
-            </span>
-          )}
-        </div>
-        <MultiChipSelect
-          options={["근성장", "현상 유지", "체지방 줄이기", "습관 잡기"]}
-          value={form.goals}
-          onChange={(v) => update("goals", v)}
-        />
-        <div className="mt-3">
-          <TextField
-            required={false}
-            fullWidth
-            placeholder="기타 의견을 적어주세요"
-            value={form.goalsEtc}
-            onChange={(v) => update("goalsEtc", v)}
-          />
-        </div>
-      </div>
-    </OnboardingShell>
+    </div>
   );
 }
