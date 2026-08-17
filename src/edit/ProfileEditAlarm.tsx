@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import EditLayout from "../components/EditLayout";
+import {
+  getCurrentUserId,
+  getNotificationSettings,
+  updateNotificationSettings,
+} from "../api";
+import { tryApi } from "../api/netguard";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const ITEM_H = 36;
@@ -115,8 +121,35 @@ export default function ProfileEditAlarm() {
   const [end, setEnd] = useState({ h: 0, m: 0 });
   const [open, setOpen] = useState<null | "start" | "end">(null);
 
+  // 서버 알림설정 로드. API 는 단일 notificationTime("HH:mm") → 사용시간 시작에 매핑.
+  useEffect(() => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    void tryApi(() => getNotificationSettings(userId), null).then((s) => {
+      if (!s) return;
+      setEnabled(s.notificationEnabled);
+      if (s.notificationTime) {
+        const [h, m] = s.notificationTime.split(":").map(Number);
+        if (Number.isFinite(h) && Number.isFinite(m)) setStart({ h, m });
+      }
+    });
+  }, []);
+
+  const handleSave = async () => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    await tryApi(
+      () =>
+        updateNotificationSettings(userId, {
+          notificationEnabled: enabled,
+          notificationTime: enabled ? `${pad(start.h)}:${pad(start.m)}` : null,
+        }),
+      null,
+    );
+  };
+
   return (
-    <EditLayout active="noti">
+    <EditLayout active="noti" onSave={handleSave}>
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold text-textColor">사용여부</span>
         <Toggle on={enabled} onToggle={() => setEnabled((v) => !v)} />

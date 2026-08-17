@@ -1,10 +1,8 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { inputClass } from "../components/common";
-
-async function requestLogin(email: string, password: string) {
-  console.log("로그인 시도:", email, password);
-}
+import { ApiError, login } from "../api";
+import { isNetworkError } from "../api/netguard";
 
 /**
  * 로그인: 이메일 / 비밀번호 폼.
@@ -28,10 +26,23 @@ export default function LoginForm() {
     setError(null);
     setIsSubmitting(true);
     try {
-      await requestLogin(email, password);
+      await login({ email: email.trim(), password });
       navigate("/home");
-    } catch {
-      setError("이메일 또는 비밀번호가 일치하지 않습니다");
+    } catch (err) {
+      // 백엔드 미가동(네트워크 실패)이면 프로토타입 데모를 위해 그대로 진행.
+      if (isNetworkError(err)) {
+        navigate("/home");
+        return;
+      }
+      if (err instanceof ApiError) {
+        setError(
+          err.code === "INVALID_CREDENTIALS"
+            ? "이메일 또는 비밀번호가 일치하지 않습니다"
+            : err.message,
+        );
+      } else {
+        setError("로그인 중 오류가 발생했습니다");
+      }
     } finally {
       setIsSubmitting(false);
     }

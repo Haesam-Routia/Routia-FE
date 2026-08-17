@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { inputClass } from "../components/common";
 import checkImg from "../assets/routia-check-pink.svg";
-
-async function requestEmailCode(email: string) {
-  console.log("인증번호 발송:", email);
-}
-async function verifyEmailCode(code: string) {
-  return code.trim().length >= 4;
-}
+import {
+  ApiError,
+  checkEmailDuplicate,
+  sendEmailVerificationCode,
+  verifyEmailCode as verifyEmailCodeApi,
+} from "../api";
+import { isNetworkError } from "../api/netguard";
 
 /**
  * 회원가입: 이름 / 이메일 인증 폼.
@@ -37,16 +37,48 @@ export default function SignupForm() {
   ).padStart(2, "0")}`;
 
   const handleSend = async () => {
-    if (!email.trim()) return;
-    await requestEmailCode(email);
+    const target = email.trim();
+    if (!target) return;
+    setError(null);
+    try {
+      // 중복 확인 → 인증번호 발송
+      const { available } = await checkEmailDuplicate(target);
+      if (!available) {
+        setError("이미 가입된 이메일입니다");
+        return;
+      }
+      await sendEmailVerificationCode(target);
+    } catch (err) {
+      if (!isNetworkError(err)) {
+        if (err instanceof ApiError && err.code === "EMAIL_ALREADY_EXISTS") {
+          setError("이미 가입된 이메일입니다");
+        } else if (err instanceof ApiError && err.code === "INVALID_EMAIL_FORMAT") {
+          setError("이메일 형식이 올바르지 않습니다");
+        } else {
+          setError("인증번호 발송에 실패했습니다");
+        }
+        return;
+      }
+      // 네트워크 실패: 데모 모드로 계속 진행
+    }
     setIsCodeSent(true);
     setSecondsLeft(299); // 04:59
-    setError(null);
   };
 
   const handleVerify = async () => {
-    if (await verifyEmailCode(code)) setShowModal(true);
-    else setError("인증번호가 일치하지 않습니다");
+    setError(null);
+    try {
+      await verifyEmailCodeApi(email.trim(), code.trim());
+      setShowModal(true);
+    } catch (err) {
+      if (isNetworkError(err)) {
+        // 데모 모드: 4자리 이상이면 통과
+        if (code.trim().length >= 4) setShowModal(true);
+        else setError("인증번호가 일치하지 않습니다");
+        return;
+      }
+      setError("인증번호가 일치하지 않습니다");
+    }
   };
 
   return (

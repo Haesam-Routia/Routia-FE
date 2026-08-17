@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AgreeItem, inputClass } from "../components/common";
 import eyeImg from "../assets/routia-verify-eye.svg";
 import LogoText from "../assets/routia-text-img.svg";
+import { ApiError, signup } from "../api";
+import { isNetworkError } from "../api/netguard";
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -31,10 +33,32 @@ export default function SignupScreen() {
   const allChecked = agree.terms && agree.marketing;
   const toggleAll = (v: boolean) => setAgree({ terms: v, marketing: v });
 
-  const handleSubmit = (e: FormEvent) => {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
-    navigate("/signup/complete");
+    if (!canSubmit || submitting) return;
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await signup({ email, password, passwordConfirm, name: nickname });
+      navigate("/signup/complete");
+    } catch (err) {
+      if (isNetworkError(err)) {
+        navigate("/signup/complete"); // 백엔드 미가동: 데모 진행
+        return;
+      }
+      if (err instanceof ApiError && err.code === "EMAIL_ALREADY_EXISTS") {
+        setSubmitError("이미 가입된 이메일입니다");
+      } else if (err instanceof ApiError) {
+        setSubmitError(err.message);
+      } else {
+        setSubmitError("회원가입 중 오류가 발생했습니다");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -140,16 +164,18 @@ export default function SignupScreen() {
           </div>
         </div>
 
+        {submitError && <p className="mt-4 text-xs text-rose-500">{submitError}</p>}
+
         <button
           type="submit"
-          disabled={!canSubmit}
+          disabled={!canSubmit || submitting}
           className={`mt-[50px] w-full rounded-xl py-3.5 text-sm font-semibold transition-colors ${
-            !canSubmit
+            !canSubmit || submitting
               ? "bg-buttonPressedColor text-white cursor-not-allowed" // 비활성화 스타일
               : "bg-buttonColor text-white cursor-pointer hover:opacity-90" // 활성화 스타일
           }`}
         >
-          {!canSubmit ? "비밀번호를 확인해주세요" : "가입하기"}
+          {submitting ? "가입 중..." : !canSubmit ? "비밀번호를 확인해주세요" : "가입하기"}
         </button>
       </form>
     </div>

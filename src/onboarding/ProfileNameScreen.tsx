@@ -3,10 +3,21 @@ import { useNavigate } from "react-router-dom";
 import ProfileLayout from "../components/ProfileLayout";
 import { TextField } from "../components/onboarding";
 import profileImg from "../assets/routia-profile.svg";
+import { submitOnboardingStep0 } from "../api";
+import { tryApi } from "../api/netguard";
+import { patchDraft } from "../store/onboardingDraft";
 
 export default function ProfileNameScreen() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+
+  const handleNext = async () => {
+    const trimmed = name.trim();
+    patchDraft({ name: trimmed });
+    // 0단계 저장 (백엔드 미가동 시 데모 모드로 건너뜀)
+    await tryApi(() => submitOnboardingStep0(trimmed), null);
+    navigate("/onboarding/step1");
+  };
 
   return (
     <ProfileLayout
@@ -21,10 +32,7 @@ export default function ProfileNameScreen() {
           </p>
         </>
       }
-      onNext={() => {
-        console.log("이름:", name);
-        navigate("/onboarding/profile/goal");
-      }}
+      onNext={handleNext}
     >
       <img src={profileImg} alt="프로필" className="h-[154px] w-[154px] self-center" />
       <TextField

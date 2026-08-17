@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../components/OnboardingLayout";
 import CheckItem from "./CheckItem";
 import loadingImg from "../assets/routia-loading-bold.svg";
+import { completeOnboarding } from "../api";
+import { tryApi } from "../api/netguard";
+import { patchDraft } from "../store/onboardingDraft";
 
 const STEPS = [
   "신체정보 및 니즈 분석",
@@ -14,6 +17,23 @@ const STEPS = [
 export default function AiPlanLoadingScreen() {
   const navigate = useNavigate();
   const [doneCount, setDoneCount] = useState(0);
+
+  // 화면 진입 시 실제 온보딩 완료 + AI 루틴 생성 호출을 1회만 실행.
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    void tryApi(() => completeOnboarding(), null).then((result) => {
+      if (result?.routine) {
+        patchDraft({}); // 드래프트 유지, 생성된 루틴은 세션에 별도 저장
+        try {
+          sessionStorage.setItem("routia.generatedRoutine", JSON.stringify(result.routine));
+        } catch {
+          /* 무시 */
+        }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (doneCount >= STEPS.length) {

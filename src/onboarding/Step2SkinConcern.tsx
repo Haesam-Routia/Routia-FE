@@ -1,5 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  BODY_CONCERN_BY_LABEL,
+  BODY_GOAL_BY_LABEL,
+  OWNED_TOOL_BY_VALUE,
+  SKIN_CONCERN_BY_LABEL,
+  SKIN_TYPE_BY_LABEL,
+  mapLabels,
+  submitOnboardingStep2,
+} from "../api";
+import { tryApi } from "../api/netguard";
+import { patchDraft } from "../store/onboardingDraft";
 
 export default function Step2SkinConcern() {
   const navigate = useNavigate();
@@ -32,6 +43,22 @@ export default function Step2SkinConcern() {
   ];
   const bodyConcerns = ["붓기", "피로감", "체형 변화", "혈액순환"];
   const goalOptions = ["근성장", "현상 유지", "체지방 줄이기", "습관 잡기"];
+
+  const handleNext = async () => {
+    const mappedGoals = mapLabels(form.goals, BODY_GOAL_BY_LABEL).slice(0, 3);
+    // bodyGoals 는 최소 1개 필요 — 미선택 시 기본값 보정
+    const bodyGoals = mappedGoals.length > 0 ? mappedGoals : ["BUILD_HABIT" as const];
+    const payload = {
+      skinType: SKIN_TYPE_BY_LABEL[form.skinType] ?? ("NORMAL" as const),
+      skinConcerns: mapLabels(form.skinConcern, SKIN_CONCERN_BY_LABEL).slice(0, 3),
+      ownedTools: mapLabels(form.tools, OWNED_TOOL_BY_VALUE).slice(0, 4),
+      bodyConcerns: mapLabels(form.bodyConcern, BODY_CONCERN_BY_LABEL).slice(0, 3),
+      bodyGoals,
+    };
+    patchDraft(payload);
+    await tryApi(() => submitOnboardingStep2(payload), null);
+    navigate("/onboarding/step3");
+  };
 
   return (
     <div className="relative flex w-full flex-col bg-white min-h-screen">
@@ -229,10 +256,7 @@ export default function Step2SkinConcern() {
       <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
         <button
           type="button"
-          onClick={() => {
-            console.log("2단계:", form);
-            navigate("/onboarding/step3");
-          }}
+          onClick={handleNext}
           className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
         >
           <span className="text-white text-base font-semibold">다음으로</span>

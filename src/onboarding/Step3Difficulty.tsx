@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DIFFICULTY_BY_VALUE, TIME_PREFERENCE_BY_LABEL, submitOnboardingStep3 } from "../api";
+import { tryApi } from "../api/netguard";
+import { patchDraft } from "../store/onboardingDraft";
 
 export default function Step3Difficulty() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("");
   const [timePref, setTimePref] = useState("");
+
+  const handleNext = async () => {
+    const payload = {
+      routineTimePreference: TIME_PREFERENCE_BY_LABEL[timePref] ?? ("ANY" as const),
+      routineDifficulty: DIFFICULTY_BY_VALUE[difficulty] ?? ("SIMPLE" as const),
+    };
+    patchDraft(payload);
+    await tryApi(() => submitOnboardingStep3(payload), null);
+    navigate("/onboarding");
+  };
 
   const difficultyOptions = [
     { value: "complex", label: "루틴이 복잡해도 괜찮아요", desc: "자세한 단계별 루틴 (12개 생성)", level: "Lv.3", emoji: "" },
@@ -113,10 +126,7 @@ export default function Step3Difficulty() {
       <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
         <button
           type="button"
-          onClick={() => {
-            console.log("3단계:", { difficulty, timePref });
-            navigate("/onboarding");
-          }}
+          onClick={handleNext}
           className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
         >
           <span className="text-white text-base font-semibold">다음으로</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   ChipSelect,
@@ -10,23 +10,84 @@ import EditLayout from "../components/EditLayout";
 import profileImg from "../assets/routia-profile.svg";
 import femaleIcon from "../assets/routia-gender-female.svg";
 import maleIcon from "../assets/routia-gender-male.svg";
+import {
+  AGE_GROUP_BY_LABEL,
+  AGE_LABEL_BY_CODE,
+  GENDER_BY_LABEL,
+  GENDER_VALUE_BY_CODE,
+  getCurrentUserId,
+  getProfile,
+  updateProfile,
+  type ProfileUpdateRequest,
+} from "../api";
+import { tryApi } from "../api/netguard";
+import { coordForSido } from "../data/regionCoords";
+
+// "165.5 cm" 같은 표시 문자열에서 숫자만 추출
+const num = (s: string): number | undefined => {
+  const n = parseFloat(String(s).replace(/[^\d.]/g, ""));
+  return Number.isFinite(n) ? n : undefined;
+};
 
 export default function ProfileEditBody() {
   const [form, setForm] = useState({
-    name: "박시은",
-    height: "165.5 cm",
-    weight: "55.5 kg",
-    age: "30대",
-    gender: "female",
-    region: { sido: "경기도", sigungu: "용인시" } as RegionValue,
+    name: "",
+    height: "",
+    weight: "",
+    age: "",
+    gender: "",
+    region: { sido: "", sigungu: "" } as RegionValue,
     detail: "",
   });
 
   const set = (k: "name" | "height" | "weight" | "age" | "gender" | "detail") => (v: string) =>
     setForm((p) => ({ ...p, [k]: v }));
 
+  // 진입 시 서버에서 프로필 로드 (로그인/백엔드 없으면 빈 폼 유지)
+  useEffect(() => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    void tryApi(() => getProfile(userId), null).then((p) => {
+      if (!p) return;
+      setForm((prev) => ({
+        ...prev,
+        name: p.userName ?? prev.name,
+        height: p.height != null ? `${p.height} cm` : prev.height,
+        weight: p.weight != null ? `${p.weight} kg` : prev.weight,
+        age: p.ageGroup ? (AGE_LABEL_BY_CODE[p.ageGroup] ?? prev.age) : prev.age,
+        gender: p.gender ? (GENDER_VALUE_BY_CODE[p.gender] ?? prev.gender) : prev.gender,
+        region: {
+          sido: p.regionSido ?? prev.region.sido,
+          sigungu: p.regionSigungu ?? prev.region.sigungu,
+        },
+      }));
+    });
+  }, []);
+
+  // 저장: 값이 있는 필드만 담아 PATCH (userName 은 profile PATCH 대상 아님)
+  const handleSave = async () => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    const body: ProfileUpdateRequest = {};
+    const h = num(form.height);
+    const w = num(form.weight);
+    if (h !== undefined) body.height = h;
+    if (w !== undefined) body.weight = w;
+    if (form.age && AGE_GROUP_BY_LABEL[form.age]) body.ageGroup = AGE_GROUP_BY_LABEL[form.age];
+    if (form.gender && GENDER_BY_LABEL[form.gender]) body.gender = GENDER_BY_LABEL[form.gender];
+    if (form.region.sido) {
+      body.regionSido = form.region.sido;
+      body.regionSigungu = form.region.sigungu;
+      const { lat, lng } = coordForSido(form.region.sido);
+      body.latitude = lat;
+      body.longitude = lng;
+      body.locationSource = "MANUAL";
+    }
+    await tryApi(() => updateProfile(userId, body), null);
+  };
+
   return (
-    <EditLayout active="body">
+    <EditLayout active="body" onSave={handleSave}>
       <img src={profileImg} alt="프로필" className="h-[100px] w-[100px] self-center" />
 
       <TextField label="이름" required={false} value={form.name} onChange={set("name")} />

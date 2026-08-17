@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { RegionSelect, type RegionValue } from "../components/onboarding";
 import femaleIcon from "../assets/routia-gender-female.svg";
 import maleIcon from "../assets/routia-gender-male.svg";
+import { AGE_GROUP_BY_LABEL, GENDER_BY_LABEL, submitOnboardingStep1 } from "../api";
+import { tryApi } from "../api/netguard";
+import { patchDraft } from "../store/onboardingDraft";
+import { coordForSido } from "../data/regionCoords";
 
 export default function Step1UserInfo() {
   const navigate = useNavigate();
@@ -19,6 +23,23 @@ export default function Step1UserInfo() {
     setForm((prev) => ({ ...prev, [key]: v }));
 
   const ages = ["10대", "20대", "30대", "40대", "50대"];
+
+  const handleNext = async () => {
+    const { lat, lng } = coordForSido(form.region.sido);
+    const payload = {
+      height: Number(form.height) || 0,
+      weight: Number(form.weight) || 0,
+      gender: GENDER_BY_LABEL[form.gender] ?? ("UNSPECIFIED" as const),
+      ageGroup: AGE_GROUP_BY_LABEL[form.age] ?? ("TWENTIES" as const),
+      regionSido: form.region.sido,
+      regionSigungu: form.region.sigungu,
+      latitude: lat,
+      longitude: lng,
+    };
+    patchDraft(payload);
+    await tryApi(() => submitOnboardingStep1(payload), null);
+    navigate("/onboarding/step2");
+  };
 
   return (
     <div className="relative flex w-full flex-col bg-white min-h-screen">
@@ -162,7 +183,7 @@ export default function Step1UserInfo() {
       <div className="absolute left-0 right-0 bottom-0 px-6 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent">
         <button
           type="button"
-          onClick={() => navigate("/onboarding/step2")}
+          onClick={handleNext}
           className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
         >
           <span className="text-white text-base font-semibold">다음으로</span>

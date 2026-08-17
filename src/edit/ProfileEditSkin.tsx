@@ -1,23 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChipSelect, MultiChipSelect, TextField } from "../components/onboarding";
 import EditLayout from "../components/EditLayout";
+import {
+  BODY_CONCERN_BY_LABEL,
+  BODY_CONCERN_LABEL_BY_CODE,
+  BODY_GOAL_BY_LABEL,
+  BODY_GOAL_LABEL_BY_CODE,
+  SKIN_CONCERN_BY_LABEL,
+  SKIN_CONCERN_LABEL_BY_CODE,
+  SKIN_TYPE_BY_LABEL,
+  SKIN_TYPE_LABEL_BY_CODE,
+  getCurrentUserId,
+  getNeeds,
+  mapCodesToLabels,
+  mapLabels,
+  updateNeeds,
+  type NeedsUpdateRequest,
+} from "../api";
+import { tryApi } from "../api/netguard";
 
 export default function ProfileEditSkin() {
   const [form, setForm] = useState({
-    skinType: "건성",
-    skinConcern: ["탄력", "주름"] as string[],
-    usedProducts: "아누아 어성초 토너, 마데카소이드 메디힐 패드",
+    skinType: "",
+    skinConcern: [] as string[],
+    usedProducts: "", // API에 대응 필드 없음 — 화면 전용
     bodyConcern: [] as string[],
-    bodyConcernEtc: "체중 감소",
-    goals: ["현상 유지"] as string[],
-    goalsEtc: "규칙적인 생활",
+    bodyConcernEtc: "",
+    goals: [] as string[],
+    goalsEtc: "",
   });
 
   const update = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
 
+  useEffect(() => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    void tryApi(() => getNeeds(userId), null).then((n) => {
+      if (!n) return;
+      setForm((prev) => ({
+        ...prev,
+        skinType: n.skinType ? (SKIN_TYPE_LABEL_BY_CODE[n.skinType] ?? prev.skinType) : prev.skinType,
+        skinConcern: mapCodesToLabels(n.skinConcerns, SKIN_CONCERN_LABEL_BY_CODE),
+        bodyConcern: mapCodesToLabels(n.bodyConcerns, BODY_CONCERN_LABEL_BY_CODE),
+        goals: mapCodesToLabels(n.bodyGoals, BODY_GOAL_LABEL_BY_CODE),
+      }));
+    });
+  }, []);
+
+  const handleSave = async () => {
+    const userId = getCurrentUserId();
+    if (userId == null) return;
+    const goals = mapLabels(form.goals, BODY_GOAL_BY_LABEL).slice(0, 3);
+    const body: NeedsUpdateRequest = {
+      skinConcerns: mapLabels(form.skinConcern, SKIN_CONCERN_BY_LABEL).slice(0, 3),
+      bodyConcerns: mapLabels(form.bodyConcern, BODY_CONCERN_BY_LABEL).slice(0, 3),
+      bodyGoals: goals.length > 0 ? goals : ["BUILD_HABIT"],
+    };
+    if (form.skinType && SKIN_TYPE_BY_LABEL[form.skinType]) {
+      body.skinType = SKIN_TYPE_BY_LABEL[form.skinType];
+    }
+    await tryApi(() => updateNeeds(userId, body), null);
+  };
+
   return (
-    <EditLayout active="skin">
+    <EditLayout active="skin" onSave={handleSave}>
       <ChipSelect
         label="피부 타입"
         required
