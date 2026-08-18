@@ -413,8 +413,68 @@ function handle(req: IncomingMessage, res: ServerResponse, body: string) {
   return sendNestedError(res, 404, "C404", `no route: ${method} ${path}`);
 }
 
-export function startMockServer(): Promise<{ baseUrl: string; close: () => Promise<void> }> {
+/** 이미 회원가입+온보딩까지 끝난 데모 계정을 심는다. (앱에서 바로 로그인/조회 가능) */
+export const DEMO_ACCOUNT = { email: "demo@routia.app", password: "Routia-demo1!" };
+export function seedDemoUser(): void {
+  if (users.has(DEMO_ACCOUNT.email)) return;
+  const u: User = {
+    id: ++userSeq,
+    email: DEMO_ACCOUNT.email,
+    password: DEMO_ACCOUNT.password,
+    name: "김루티",
+    onboarding: {
+      lastCompletedStep: 3,
+      status: "COMPLETED",
+      step1CompletedAt: NOW,
+      step2CompletedAt: NOW,
+      step3CompletedAt: NOW,
+      completedAt: NOW,
+    },
+    profile: {
+      userName: "김루티",
+      height: 165.5,
+      weight: 55.2,
+      gender: "FEMALE",
+      ageGroup: "TWENTIES",
+      regionSido: "서울특별시",
+      regionSigungu: "강남구",
+      latitude: 37.5172,
+      longitude: 127.0473,
+      locationSource: "MANUAL",
+    },
+    needs: {
+      skinType: "DRY",
+      skinConcerns: ["ACNE", "PORE"],
+      ownedTools: ["FACE_FASCIA_TOOL"],
+      bodyConcerns: ["SWELLING"],
+      bodyGoals: ["MAINTAIN", "BUILD_HABIT"],
+      routineTimePreference: "MORNING",
+      routineDifficulty: "SIMPLE",
+    },
+    notification: { notificationEnabled: true, notificationTime: "08:00" },
+    items: generateRoutineItems(),
+  };
+  u.items[0].completed = true;
+  u.items[1].completed = true;
+  users.set(u.email, u);
+}
+
+type StartOptions = { port?: number; seed?: boolean };
+
+export function startMockServer(
+  opts: StartOptions = {},
+): Promise<{ baseUrl: string; close: () => Promise<void> }> {
+  if (opts.seed) seedDemoUser();
   const server = createServer((req, res) => {
+    // CORS: 브라우저에서 다른 오리진(localhost:5203 등)으로부터의 호출 허용
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "authorization, content-type");
+    if (req.method === "OPTIONS") {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     readBody(req).then((body) => {
       try {
         handle(req, res, body);
@@ -424,7 +484,7 @@ export function startMockServer(): Promise<{ baseUrl: string; close: () => Promi
     });
   });
   return new Promise((resolve) => {
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(opts.port ?? 0, "127.0.0.1", () => {
       const { port } = server.address() as AddressInfo;
       resolve({
         baseUrl: `http://127.0.0.1:${port}`,

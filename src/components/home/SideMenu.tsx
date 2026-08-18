@@ -3,6 +3,7 @@ import { menuItems } from "../../data/home";
 
 interface SideMenuProps {
   active?: string;
+  userName?: string;
   onClose?: () => void;
   onSelect?: (item: string) => void;
   onLogout?: () => void;
@@ -57,7 +58,13 @@ const menuIcons: Record<string, React.ReactNode> = {
   ),
 };
 
-export default function SideMenu({ active = "홈", onClose, onSelect, onLogout }: SideMenuProps) {
+export default function SideMenu({
+  active = "홈",
+  userName = "서은",
+  onClose,
+  onSelect,
+  onLogout,
+}: SideMenuProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -112,10 +119,10 @@ export default function SideMenu({ active = "홈", onClose, onSelect, onLogout }
         {/* 프로필 영역 */}
         <div className="flex items-center gap-3 px-6 pt-4 pb-6">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B7A] to-[#DB4A5E] flex items-center justify-center text-white text-sm font-bold shrink-0">
-            서은
+            {userName.slice(-2)}
           </div>
           <div>
-            <p className="text-[15px] font-bold text-neutral-900">서은님</p>
+            <p className="text-[15px] font-bold text-neutral-900">{userName}님</p>
             <p className="text-xs text-neutral-400">피부 프로필 92% 완성</p>
           </div>
         </div>

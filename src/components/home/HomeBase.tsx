@@ -4,6 +4,7 @@ import {
   todoGuide as mockGuide,
   type WeatherInfo,
   type ProgressInfo,
+  type TodoSection,
 } from "../../data/home";
 import HomeHeader from "./HomeHeader";
 import WeatherCard from "./WeatherCard";
@@ -19,6 +20,9 @@ interface HomeBaseProps {
   weather?: WeatherInfo;
   progress?: ProgressInfo;
   guide?: string;
+  userName?: string;
+  dateText?: string;
+  tasks?: TodoSection[];
 }
 
 export default function HomeBase({
@@ -28,13 +32,21 @@ export default function HomeBase({
   weather = mockWeather,
   progress = mockProgress,
   guide = mockGuide,
+  userName,
+  dateText,
+  tasks,
 }: HomeBaseProps) {
   return (
     <div className="flex flex-col gap-4 px-4 pb-10 pt-6">
-      <HomeHeader onMenuClick={onMenuClick} onDateClick={onDateClick} />
+      <HomeHeader
+        onMenuClick={onMenuClick}
+        onDateClick={onDateClick}
+        userName={userName}
+        dateText={dateText}
+      />
       <WeatherCard weather={weather} />
       <ProgressCard progress={progress} onDetail={onProgressDetail} />
-      <TodayTasksCard guide={guide} />
+      <TodayTasksCard guide={guide} sections={tasks} done={progress.done} total={progress.total} />
       <StreakCard />
     </div>
   );

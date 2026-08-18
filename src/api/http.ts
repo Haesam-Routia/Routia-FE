@@ -27,9 +27,17 @@ export class ApiError extends Error {
 
 // ---- 설정 (baseURL / 토큰) --------------------------------------------------
 
+// vite.config 의 define 으로 빌드 시 주입되는 상수. (미주입 환경에선 undefined)
+declare const __ROUTIA_API_BASE__: string | undefined;
+
 function readEnvBaseUrl(): string {
+  // 1) vite define 로 심은 상수 (import.meta.env 가 주입 안 되는 환경 대비)
+  //    typeof 는 미선언 식별자에도 안전(ReferenceError 없이 "undefined").
+  if (typeof __ROUTIA_API_BASE__ === "string" && __ROUTIA_API_BASE__) {
+    return __ROUTIA_API_BASE__;
+  }
+  // 2) 표준 Vite 환경변수
   try {
-    // Vite 빌드에서만 존재. Node 에서는 접근 시 던질 수 있어 try 로 감쌈.
     const env = (import.meta as unknown as { env?: Record<string, string> }).env;
     if (env && typeof env.VITE_API_BASE_URL === "string") return env.VITE_API_BASE_URL;
   } catch {

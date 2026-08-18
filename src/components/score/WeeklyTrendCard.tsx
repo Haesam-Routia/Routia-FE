@@ -1,6 +1,7 @@
-import { weeklyTrend } from "../../data/score";
+import { weeklyTrend as mockTrend, type WeeklyTrendItem } from "../../data/score";
 
-export default function WeeklyTrendCard() {
+export default function WeeklyTrendCard({ data = mockTrend }: { data?: WeeklyTrendItem[] }) {
+  const weeklyTrend = data;
   return (
     <div className="h-[144px] w-full rounded-[18px] border border-lineColor bg-white px-[15px] pt-3 pb-4">
       <p className="text-[11px] font-normal text-[#424242]">주간 수행 추이</p>

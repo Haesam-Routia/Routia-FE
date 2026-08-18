@@ -1,15 +1,22 @@
 interface HomeHeaderProps {
   onMenuClick?: () => void;
   onDateClick?: () => void;
+  userName?: string;
+  dateText?: string;
 }
 
-export default function HomeHeader({ onMenuClick, onDateClick }: HomeHeaderProps) {
+export default function HomeHeader({
+  onMenuClick,
+  onDateClick,
+  userName = "서은",
+  dateText = "8월 5일 수요일",
+}: HomeHeaderProps) {
   return (
     <header className="flex items-start justify-between">
       <div>
-        <p className="text-sm font-semibold text-subtextColor">좋은 하루예요, 서은님!</p>
+        <p className="text-sm font-semibold text-subtextColor">좋은 하루예요, {userName}님!</p>
         <button type="button" onClick={onDateClick} className="mt-1 flex items-center gap-1">
-          <span className="text-2xl font-bold text-[#424242]">8월 5일 수요일</span>
+          <span className="text-2xl font-bold text-[#424242]">{dateText}</span>
           <svg
             width="16"
             height="16"

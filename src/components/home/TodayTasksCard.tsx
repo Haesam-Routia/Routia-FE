@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { allTaskSections, progress } from "../../data/home";
+import {
+  allTaskSections as mockSections,
+  progress as mockProgress,
+  type TodoSection,
+} from "../../data/home";
 import TaskCheckItem from "./TaskCheckItem";
 
 interface TodayTasksCardProps {
   guide: string;
+  sections?: TodoSection[];
+  done?: number;
+  total?: number;
 }
 
-export default function TodayTasksCard({ guide }: TodayTasksCardProps) {
+export default function TodayTasksCard({
+  guide,
+  sections = mockSections,
+  done = mockProgress.done,
+  total = mockProgress.total,
+}: TodayTasksCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const allTaskSections = sections;
+  const progress = { done, total };
 
   return (
     <button

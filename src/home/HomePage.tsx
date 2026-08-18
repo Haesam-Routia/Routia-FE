@@ -8,10 +8,26 @@ import {
   CompleteModal,
   TodayDirectionCard,
 } from "../components/home";
-import { clearAccessToken, getHome, getTodayWeather } from "../api";
-import type { WeatherInfo, ProgressInfo } from "../data/home";
+import { clearAccessToken, getHome, getTodayRoutines, getTodayWeather } from "../api";
+import type { TimeSlot } from "../api";
+import type { WeatherInfo, ProgressInfo, TodoSection } from "../data/home";
 
 type Overlay = "none" | "menu" | "calendar" | "complete" | "direction";
+
+const SLOT_LABEL: Record<TimeSlot, string> = {
+  MORNING: "오전",
+  AFTERNOON: "오후",
+  EVENING: "저녁",
+  BEFORE_SLEEP: "취침 전",
+};
+
+// "2026-08-18" → "8월 18일 화요일"
+function formatKoreanDate(iso: string): string {
+  const d = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return iso;
+  const week = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 ${week}요일`;
+}
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -20,6 +36,9 @@ export default function HomePage() {
   const [weather, setWeather] = useState<WeatherInfo>();
   const [progress, setProgress] = useState<ProgressInfo>();
   const [guide, setGuide] = useState<string>();
+  const [userName, setUserName] = useState<string>();
+  const [dateText, setDateText] = useState<string>();
+  const [tasks, setTasks] = useState<TodoSection[]>();
 
   useEffect(() => {
     let alive = true;
@@ -34,6 +53,8 @@ export default function HomePage() {
           total: home.totalCount,
         });
         setGuide(home.directionText);
+        setUserName(home.userName);
+        setDateText(formatKoreanDate(home.date));
       } catch {
         /* 백엔드 미가동: mock 폴백 */
       }
@@ -49,6 +70,24 @@ export default function HomePage() {
           uvLevel: w.uvLevel,
           uvDesc: w.uvTip,
         });
+      } catch {
+        /* 백엔드 미가동: mock 폴백 */
+      }
+      try {
+        const today = await getTodayRoutines();
+        if (!alive) return;
+        // timeSlot 순서 유지하며 시간대별로 그룹핑
+        const grouped: TodoSection[] = [];
+        for (const it of today.items) {
+          const period = SLOT_LABEL[it.timeSlot] ?? "오전";
+          let section = grouped.find((g) => g.period === period);
+          if (!section) {
+            section = { period, items: [] };
+            grouped.push(section);
+          }
+          section.items.push({ id: it.itemId, label: it.title, done: it.completed });
+        }
+        setTasks(grouped);
       } catch {
         /* 백엔드 미가동: mock 폴백 */
       }
@@ -69,12 +108,16 @@ export default function HomePage() {
         weather={weather}
         progress={progress}
         guide={guide}
+        userName={userName}
+        dateText={dateText}
+        tasks={tasks}
       />
 
       {/* 사이드 메뉴 */}
       {overlay === "menu" && (
         <SideMenu
           active="홈"
+          userName={userName}
           onClose={close}
           onSelect={(item) => {
             close();
