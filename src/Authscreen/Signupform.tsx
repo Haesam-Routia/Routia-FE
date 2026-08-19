@@ -112,6 +112,9 @@ export default function SignupForm() {
             {isCodeSent ? "인증번호 받기" : "인증번호 받기"}
           </button>
         </div>
+        {!isCodeSent && error && (
+          <p className="text-xs mt-1 text-rose-500">{error}</p>
+        )}
 
         {isCodeSent && (
           <div className="flex flex-col">

@@ -21,7 +21,7 @@ export default function AiPlanDoneScreen() {
 
       <p className="mt-13 text-sm text-neutral-500">앞으로 루티아와 함께 목표를 달성해봐요!</p>
 
-      <OnboardingButton onClick={() => navigate("/onboarding/loading")}>
+      <OnboardingButton onClick={() => navigate("/home")}>
         홈 화면 가기
       </OnboardingButton>
     </OnboardingLayout>

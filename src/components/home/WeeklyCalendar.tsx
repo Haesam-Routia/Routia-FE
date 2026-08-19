@@ -1,14 +1,50 @@
 import { useEffect, useState } from "react";
-import { weekDays, selectedDate } from "../../data/home";
 import cancelIcon from "../../assets/routia-cancellation.svg";
 
 interface WeeklyCalendarProps {
+  /** 현재 선택된 날짜 (ISO: "2026-08-13") */
+  selectedDate?: string;
   onClose?: () => void;
-  onSelectDay?: (date: number) => void;
+  onSelectDay?: (isoDate: string) => void;
 }
 
-export default function WeeklyCalendar({ onClose, onSelectDay }: WeeklyCalendarProps) {
+interface CalendarDay {
+  iso: string; // "2026-08-13"
+  date: number; // 13
+  weekday: string; // "수요일"
+}
+
+const WEEKDAY_NAMES = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+
+/** 주어진 날짜가 속한 주(일~토)의 날짜 배열을 생성 */
+function getWeekDays(baseDate: string): CalendarDay[] {
+  const d = new Date(`${baseDate}T00:00:00`);
+  const dayOfWeek = d.getDay(); // 0=일, 1=월, ..., 6=토
+  const sunday = new Date(d);
+  sunday.setDate(d.getDate() - dayOfWeek);
+
+  const days: CalendarDay[] = [];
+  for (let i = 0; i < 7; i++) {
+    const current = new Date(sunday);
+    current.setDate(sunday.getDate() + i);
+    const iso = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
+    days.push({
+      iso,
+      date: current.getDate(),
+      weekday: WEEKDAY_NAMES[current.getDay()],
+    });
+  }
+  return days;
+}
+
+export default function WeeklyCalendar({ selectedDate, onClose, onSelectDay }: WeeklyCalendarProps) {
   const [visible, setVisible] = useState(false);
+
+  // 선택된 날짜 없으면 오늘 기준
+  const today = new Date();
+  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+  const baseDate = selectedDate || todayIso;
+  const weekDays = getWeekDays(baseDate);
 
   useEffect(() => {
     requestAnimationFrame(() => setVisible(true));
@@ -48,13 +84,13 @@ export default function WeeklyCalendar({ onClose, onSelectDay }: WeeklyCalendarP
         {/* 주간 날짜 */}
         <div className="flex items-center">
           {weekDays.map((day) => {
-            const isSelected = day.date === selectedDate;
+            const isSelected = day.iso === baseDate;
             return (
-              <div key={day.date} className="flex flex-1 justify-center">
+              <div key={day.iso} className="flex flex-1 justify-center">
                 <button
                   type="button"
                   onClick={() => {
-                    onSelectDay?.(day.date);
+                    onSelectDay?.(day.iso);
                     handleClose();
                   }}
                   className={

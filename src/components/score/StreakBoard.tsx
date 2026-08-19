@@ -1,74 +1,74 @@
 import sparkle from "../../assets/routia-score.svg";
 import dot from "../../assets/routia-circle.svg";
-import bigDot from "../../assets/routia-bigcircle.svg";
-import bigStar from "../../assets/routia-Star.svg";
-import successCircle from "../../assets/routia-success-circle.svg";
 
 interface StreakBoardProps {
   current: number;
-  successCount?: number;
 }
 
-const ROW1 = [30, 76, 122, 168, 214, 260];
-const ROW2 = [290, 246, 202, 158, 114, 70];
-const ROW3 = [70, 114, 158, 202, 246, 290];
+// 3행으로 이어지는 경로 위의 포인트들 (총 21개, 한 줄 7개)
+// 각 행의 y 좌표: 40, 110, 180 (간격 70 균등)
+const ROW1 = [50, 92, 134, 176, 218, 260, 302];
+const ROW2 = [302, 260, 218, 176, 134, 92, 50];
+const ROW3 = [50, 92, 134, 176, 218, 260, 302];
 
-export default function StreakBoard({ current, successCount = 1 }: StreakBoardProps) {
+const Y1 = 40;
+const Y2 = 110;
+const Y3 = 180;
+
+export default function StreakBoard({ current }: StreakBoardProps) {
+  // 달성 일수 (최대 18개 포인트)
+  const totalPoints = ROW1.length + ROW2.length + ROW3.length;
+  const starCount = Math.min(Math.max(current, 0), totalPoints);
+
   return (
     <svg viewBox="0 0 340 210" className="w-full" xmlns="http://www.w3.org/2000/svg">
+      {/* 경로 */}
       <path
-        d="M30,30 L260,30 C288,30 302,44 302,62 C302,84 300,120 290,120 L70,120 C44,120 28,132 28,152 C28,172 44,184 70,184 L308,184"
+        d={`M50,${Y1} L302,${Y1} Q330,${Y1} 330,${(Y1 + Y2) / 2} Q330,${Y2} 302,${Y2} L50,${Y2} Q22,${Y2} 22,${(Y2 + Y3) / 2} Q22,${Y3} 50,${Y3} L320,${Y3}`}
         fill="none"
         stroke="#C9C9C9"
-        strokeWidth="4"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M311,178 L319,184 L311,190"
+        d={`M323,${Y3 - 5} L330,${Y3} L323,${Y3 + 5}`}
         fill="none"
         stroke="#C9C9C9"
-        strokeWidth="4"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
 
-      {ROW2.map((x, i) =>
-        i < successCount ? (
-          <image
-            key={`s2${i}`}
-            href={successCircle}
-            x={x - 10.5}
-            y={120 - 10.5}
-            width="21"
-            height="21"
-          />
+      {/* ROW1: 인덱스 0~6 */}
+      {ROW1.map((x, i) => {
+        const idx = i;
+        return idx < starCount ? (
+          <image key={`r1${i}`} href={sparkle} x={x - 12} y={Y1 - 12} width="24" height="24" />
         ) : (
-          <image key={`d2${i}`} href={dot} x={x - 8.5} y={120 - 8.5} width="17" height="17" />
-        ),
-      )}
-      {ROW3.map((x, i) => (
-        <image key={`d3${i}`} href={dot} x={x - 8.5} y={184 - 8.5} width="17" height="17" />
-      ))}
+          <image key={`r1${i}`} href={dot} x={x - 7} y={Y1 - 7} width="14" height="14" />
+        );
+      })}
 
-      <image href={bigDot} x={28 - 15.5} y={152 - 15.5} width="31" height="31" />
+      {/* ROW2: 인덱스 7~13 */}
+      {ROW2.map((x, i) => {
+        const idx = ROW1.length + i;
+        return idx < starCount ? (
+          <image key={`r2${i}`} href={sparkle} x={x - 12} y={Y2 - 12} width="24" height="24" />
+        ) : (
+          <image key={`r2${i}`} href={dot} x={x - 7} y={Y2 - 7} width="14" height="14" />
+        );
+      })}
 
-      {ROW1.map((x, i) => (
-        <image key={`s${i}`} href={sparkle} x={x - 15} y={30 - 15} width="30" height="30" />
-      ))}
-
-      <image href={bigStar} x={300 - 26.5} y={62 - 25.5} width="53" height="51" />
-      <text
-        x="300"
-        y="64"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fontSize="20"
-        fontWeight="700"
-        fill="#FFFFFF"
-      >
-        {current}
-      </text>
+      {/* ROW3: 인덱스 14~20 */}
+      {ROW3.map((x, i) => {
+        const idx = ROW1.length + ROW2.length + i;
+        return idx < starCount ? (
+          <image key={`r3${i}`} href={sparkle} x={x - 12} y={Y3 - 12} width="24" height="24" />
+        ) : (
+          <image key={`r3${i}`} href={dot} x={x - 7} y={Y3 - 7} width="14" height="14" />
+        );
+      })}
     </svg>
   );
 }

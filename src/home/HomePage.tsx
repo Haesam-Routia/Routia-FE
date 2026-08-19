@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   PhoneFrame,
@@ -8,7 +8,7 @@ import {
   CompleteModal,
   TodayDirectionCard,
 } from "../components/home";
-import { clearAccessToken, getHome, getTodayRoutines, getTodayWeather } from "../api";
+import { clearAccessToken, getHome, getTodayRoutines, getTodayWeather, toggleTodayItem } from "../api";
 import type { TimeSlot } from "../api";
 import type { WeatherInfo, ProgressInfo, TodoSection } from "../data/home";
 
@@ -32,6 +32,9 @@ function formatKoreanDate(iso: string): string {
 export default function HomePage() {
   const navigate = useNavigate();
   const [overlay, setOverlay] = useState<Overlay>("none");
+  // 서버에서 받아온 날짜 (위클리 달력과 동기화)
+  const [homeDate, setHomeDate] = useState<string>();
+
   // 라이브 데이터. 로드 전/실패 시 undefined → HomeBase 가 mock 으로 폴백.
   const [weather, setWeather] = useState<WeatherInfo>();
   const [progress, setProgress] = useState<ProgressInfo>();
@@ -55,6 +58,16 @@ export default function HomePage() {
         setGuide(home.directionText);
         setUserName(home.userName);
         setDateText(formatKoreanDate(home.date));
+        setHomeDate(home.date);
+
+        // todayTasks가 응답에 포함된 경우 직접 사용
+        if (home.todayTasks && home.todayTasks.length > 0) {
+          const grouped: TodoSection[] = [{
+            period: "오늘",
+            items: home.todayTasks.map((t) => ({ id: t.itemId, label: t.title, done: t.completed })),
+          }];
+          setTasks(grouped);
+        }
       } catch {
         /* 백엔드 미가동: mock 폴백 */
       }
@@ -97,6 +110,38 @@ export default function HomePage() {
     };
   }, []);
 
+  const handleToggleTask = useCallback(
+    async (itemId: number) => {
+      // 낙관적 업데이트: 즉시 UI 반영
+      setTasks((prev) => {
+        if (!prev) return prev;
+        const updated = prev.map((section) => ({
+          ...section,
+          items: section.items.map((item) =>
+            item.id === itemId ? { ...item, done: !item.done } : item,
+          ),
+        }));
+
+        // 진행률 재계산
+        const allItems = updated.flatMap((s) => s.items);
+        const total = allItems.length;
+        const done = allItems.filter((i) => i.done).length;
+        const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+        setProgress((p) => (p ? { ...p, done, total, percent } : p));
+
+        return updated;
+      });
+
+      // 서버에 반영 (실패해도 UI는 유지 — 백엔드 미가동 대비)
+      try {
+        await toggleTodayItem(itemId);
+      } catch {
+        /* 네트워크 실패 시 무시 (데모 모드) */
+      }
+    },
+    [],
+  );
+
   const close = () => setOverlay("none");
 
   return (
@@ -105,6 +150,7 @@ export default function HomePage() {
         onMenuClick={() => setOverlay("menu")}
         onDateClick={() => setOverlay("calendar")}
         onProgressDetail={() => setOverlay("direction")}
+        onToggleTask={handleToggleTask}
         weather={weather}
         progress={progress}
         guide={guide}
@@ -132,7 +178,13 @@ export default function HomePage() {
       )}
 
       {/* 위클리 달력 */}
-      {overlay === "calendar" && <WeeklyCalendar onClose={close} onSelectDay={close} />}
+      {overlay === "calendar" && (
+        <WeeklyCalendar
+          selectedDate={homeDate}
+          onClose={close}
+          onSelectDay={() => close()}
+        />
+      )}
 
       {/* 완료 모달 */}
       {overlay === "complete" && (

@@ -105,7 +105,7 @@ export const weekDays: CalendarDay[] = [
 
 export const selectedDate = 5;
 
-export const menuItems = ["홈", "AI 코치", "성취도", "정보수정"];
+export const menuItems = ["홈", "성취도", "정보수정"];
 
 // 오늘의 방향 (동기부여)
 export interface DirectionSection {

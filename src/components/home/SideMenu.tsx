@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { menuItems } from "../../data/home";
+import { getHome } from "../../api";
 
 interface SideMenuProps {
   active?: string;
@@ -60,17 +61,36 @@ const menuIcons: Record<string, React.ReactNode> = {
 
 export default function SideMenu({
   active = "홈",
-  userName = "서은",
+  userName: userNameProp,
   onClose,
   onSelect,
   onLogout,
 }: SideMenuProps) {
   const [visible, setVisible] = useState(false);
+  const [userName, setUserName] = useState(userNameProp || "");
 
   useEffect(() => {
     // 마운트 직후 애니메이션 시작
     requestAnimationFrame(() => setVisible(true));
   }, []);
+
+  // userName prop이 없으면 API에서 가져오기
+  useEffect(() => {
+    if (userNameProp) {
+      setUserName(userNameProp);
+      return;
+    }
+    let alive = true;
+    (async () => {
+      try {
+        const home = await getHome();
+        if (alive) setUserName(home.userName);
+      } catch {
+        /* 실패 시 빈 문자열 유지 */
+      }
+    })();
+    return () => { alive = false; };
+  }, [userNameProp]);
 
   const handleClose = () => {
     setVisible(false);
@@ -123,7 +143,7 @@ export default function SideMenu({
           </div>
           <div>
             <p className="text-[15px] font-bold text-neutral-900">{userName}님</p>
-            <p className="text-xs text-neutral-400">피부 프로필 92% 완성</p>
+            {/* <p className="text-xs text-neutral-400">피부 프로필 92% 완성</p> */}
           </div>
         </div>
 

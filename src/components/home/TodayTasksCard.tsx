@@ -11,6 +11,7 @@ interface TodayTasksCardProps {
   sections?: TodoSection[];
   done?: number;
   total?: number;
+  onToggleTask?: (itemId: number) => void;
 }
 
 export default function TodayTasksCard({
@@ -18,6 +19,7 @@ export default function TodayTasksCard({
   sections = mockSections,
   done = mockProgress.done,
   total = mockProgress.total,
+  onToggleTask,
 }: TodayTasksCardProps) {
   const [expanded, setExpanded] = useState(false);
   const allTaskSections = sections;
@@ -42,7 +44,7 @@ export default function TodayTasksCard({
       {/* 제목 + 완료 현황 */}
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-bold text-[#f14867]">
-          🔥 오늘 할 일
+          오늘 할 일
         </h2>
         <span className="text-xs font-semibold text-subtextColor">
           <span className="text-[#FF1C46]">{progress.done}</span>/{progress.total} 완료
@@ -63,7 +65,12 @@ export default function TodayTasksCard({
             <p className="mb-3 text-[13px] font-bold text-[#FF5D7B]">{section.period}</p>
             <ul className="flex flex-col gap-3">
               {section.items.map((item) => (
-                <TaskCheckItem key={item.id} label={item.label} done={item.done} />
+                <TaskCheckItem
+                  key={item.id}
+                  label={item.label}
+                  done={item.done}
+                  onToggle={() => onToggleTask?.(item.id)}
+                />
               ))}
             </ul>
           </div>

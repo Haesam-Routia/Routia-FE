@@ -16,6 +16,7 @@ interface HomeBaseProps {
   onMenuClick?: () => void;
   onDateClick?: () => void;
   onProgressDetail?: () => void;
+  onToggleTask?: (itemId: number) => void;
   // 라이브 데이터 오버라이드 (미전달 시 mock 사용 → 백엔드 없이도 렌더)
   weather?: WeatherInfo;
   progress?: ProgressInfo;
@@ -29,6 +30,7 @@ export default function HomeBase({
   onMenuClick,
   onDateClick,
   onProgressDetail,
+  onToggleTask,
   weather = mockWeather,
   progress = mockProgress,
   guide = mockGuide,
@@ -46,7 +48,13 @@ export default function HomeBase({
       />
       <WeatherCard weather={weather} />
       <ProgressCard progress={progress} onDetail={onProgressDetail} />
-      <TodayTasksCard guide={guide} sections={tasks} done={progress.done} total={progress.total} />
+      <TodayTasksCard
+        guide={guide}
+        sections={tasks}
+        done={progress.done}
+        total={progress.total}
+        onToggleTask={onToggleTask}
+      />
       <StreakCard />
     </div>
   );
