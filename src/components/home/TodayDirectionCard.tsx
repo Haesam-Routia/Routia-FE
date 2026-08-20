@@ -10,23 +10,14 @@ interface TodayDirectionCardProps {
 }
 
 /**
- * 긴 title 문장을 짧은 요약 타이틀로 줄인다.
- * "오늘은~" 조언 부분을 헤드라인으로 잡고(날씨 서두 생략),
- * 첫 문장 → 너무 길면 첫 쉼표까지 → 그래도 길면 26자 부근 어절 경계에서 자르고 "…".
+ * 긴 title 을 한 문장짜리 헤드라인으로 정리한다.
+ * - 날씨 서두는 생략하고 "오늘은~" 조언부터 시작
+ * - 첫 문장까지만 사용해 완전한 문장으로 끝맺음(중간에 자르지 않음)
  */
 function summarizeTitle(text: string): string {
-  let s = (text.split(/(?<=[.!?])\s+/)[0] ?? text).trim();
-
-  const idx = s.indexOf("오늘은");
-  if (idx > 0) s = s.slice(idx);
-  if (s.length <= 26) return s;
-
-  const comma = s.indexOf(",");
-  if (comma > 6 && comma <= 28) return s.slice(0, comma).trim();
-
-  const cut = s.slice(0, 26);
-  const lastSpace = cut.lastIndexOf(" ");
-  return `${(lastSpace > 10 ? cut.slice(0, lastSpace) : cut).trim()}…`;
+  const first = (text.split(/(?<=[.!?])\s+/)[0] ?? text).trim();
+  const idx = first.indexOf("오늘은");
+  return idx > 0 ? first.slice(idx) : first;
 }
 
 /** 카드 공통 프레임 (위치·크기·그림자). */
@@ -104,14 +95,14 @@ export default function TodayDirectionCard({
       {/* 본문 (스크롤 영역) */}
       <div className="flex-1 overflow-y-auto px-5 pb-4">
         {/* 히어로 */}
-        <div className="mt-5 flex flex-col items-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-mainColor to-mainLightColor">
+        <div className="mt-5 flex flex-col">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-mainColor to-mainLightColor">
             <span className="text-[56px] leading-none">{direction.emoji}</span>
           </div>
-          <h2 className="mt-4 text-center text-[18px] font-bold leading-snug text-textColor">
+          <h2 className="mt-5 text-justify text-[18px] font-bold leading-snug text-textColor">
             {summarizeTitle(direction.title)}
           </h2>
-          <p className="mt-2 text-center text-[13px] leading-relaxed text-subtextColor">
+          <p className="mt-3.5 text-justify text-[13px] leading-relaxed text-subtextColor">
             {direction.description}
           </p>
         </div>
