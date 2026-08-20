@@ -51,7 +51,7 @@ export default function AiPlanLoadingScreen() {
       }, 800);
       return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setDoneCount((c) => c + 1), 2000);
+    const t = setTimeout(() => setDoneCount((c) => c + 1), 7500);
     return () => clearTimeout(t);
   }, [doneCount, navigate, homeReady]);
 
