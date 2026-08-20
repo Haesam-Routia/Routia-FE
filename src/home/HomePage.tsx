@@ -7,6 +7,7 @@ import {
   WeeklyCalendar,
   CompleteModal,
   TodayDirectionCard,
+  BlurScrim,
 } from "../components/home";
 import { clearAccessToken, getHome, getTodayRoutines, getTodayWeather, toggleTodayItem } from "../api";
 import type { TimeSlot } from "../api";
@@ -192,7 +193,12 @@ export default function HomePage() {
       )}
 
       {/* 오늘의 방향 카드 */}
-      {overlay === "direction" && <TodayDirectionCard onClose={close} />}
+      {overlay === "direction" && (
+        <>
+          <BlurScrim onClose={close} />
+          <TodayDirectionCard onClose={close} />
+        </>
+      )}
     </PhoneFrame>
   );
 }

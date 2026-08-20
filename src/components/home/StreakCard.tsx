@@ -34,7 +34,13 @@ export default function StreakCard() {
   const week = getRecentWeek();
 
   return (
-    <div className="flex h-[80px] w-full items-center rounded-xl border border-lineColor bg-white px-4">
+    <div className="flex flex-col w-full rounded-xl border border-lineColor bg-white px-4 py-3 gap-2">
+      {/* 안내 문구 */}
+      <p className="text-[12px] font-semibold text-buttonColor">
+        오늘 할 일을 끝내면 연속달성이 가능해요
+      </p>
+
+      <div className="flex items-center">
       {/* 왼쪽: 연속 달성 숫자 */}
       <div className="flex flex-col items-start shrink-0 mr-4">
         <p className="text-[10px] font-medium text-buttonColor leading-none">연속 달성</p>
@@ -76,6 +82,7 @@ export default function StreakCard() {
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );

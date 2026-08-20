@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../components/OnboardingLayout";
 import CheckItem from "./CheckItem";
 import loadingImg from "../assets/routia-loading-bold.svg";
-import { completeOnboarding } from "../api";
+import { completeOnboarding, getHome } from "../api";
 import { tryApi } from "../api/netguard";
 import { patchDraft } from "../store/onboardingDraft";
 
@@ -17,13 +17,14 @@ const STEPS = [
 export default function AiPlanLoadingScreen() {
   const navigate = useNavigate();
   const [doneCount, setDoneCount] = useState(0);
+  const [homeReady, setHomeReady] = useState(false);
 
   // 화면 진입 시 실제 온보딩 완료 + AI 루틴 생성 호출을 1회만 실행.
   const started = useRef(false);
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    void tryApi(() => completeOnboarding(), null).then((result) => {
+    void tryApi(() => completeOnboarding(), null).then(async (result) => {
       if (result?.routine) {
         patchDraft({}); // 드래프트 유지, 생성된 루틴은 세션에 별도 저장
         try {
@@ -32,17 +33,27 @@ export default function AiPlanLoadingScreen() {
           /* 무시 */
         }
       }
+      // 홈 화면 데이터를 미리 받아서 준비 확인
+      try {
+        await getHome();
+        setHomeReady(true);
+      } catch {
+        /* 홈 데이터 실패 시 기존 플로우 유지 */
+      }
     });
   }, []);
 
   useEffect(() => {
     if (doneCount >= STEPS.length) {
-      const t = setTimeout(() => navigate("/onboarding/done"), 800);
+      // 애니메이션 완료 후: 홈 데이터가 준비되면 바로 홈으로, 아니면 done 화면으로
+      const t = setTimeout(() => {
+        navigate(homeReady ? "/home" : "/onboarding/done");
+      }, 800);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setDoneCount((c) => c + 1), 2000);
     return () => clearTimeout(t);
-  }, [doneCount, navigate]);
+  }, [doneCount, navigate, homeReady]);
 
   const [dots, setDots] = useState("");
 
