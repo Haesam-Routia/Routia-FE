@@ -22,3 +22,33 @@ export function updateNotificationSettings(
     body,
   });
 }
+
+// ---- Web Push 기기 등록/비활성화 ------------------------------------------------
+
+export type PushDeviceResponse = {
+  id: number;
+  platform: string;
+  active: boolean;
+  lastSeenAt: string;
+};
+
+/** Web Push 기기 등록. Firebase Installation ID를 서버에 전달. */
+export function registerPushDevice(
+  userId: number,
+  body: { installationId: string; platform: "WEB" },
+): Promise<PushDeviceResponse> {
+  return requestData<PushDeviceResponse>(`/api/v1/users/${userId}/push-devices`, {
+    method: "POST",
+    body,
+  });
+}
+
+/** Web Push 기기 비활성화. */
+export function deactivatePushDevice(
+  userId: number,
+  deviceId: number,
+): Promise<PushDeviceResponse> {
+  return requestData<PushDeviceResponse>(`/api/v1/users/${userId}/push-devices/${deviceId}`, {
+    method: "DELETE",
+  });
+}

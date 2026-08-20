@@ -5,7 +5,9 @@ import {
   getNotificationSettings,
   updateNotificationSettings,
 } from "../api";
+import { registerPushDevice, deactivatePushDevice } from "../api/notifications";
 import { tryApi } from "../api/netguard";
+import { requestFcmToken } from "../firebase";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const ITEM_H = 40;
@@ -150,6 +152,7 @@ export default function ProfileEditAlarm() {
   const [enabled, setEnabled] = useState(false);
   const [start, setStart] = useState({ h: 9, m: 0 });
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [deviceId, setDeviceId] = useState<number | null>(null);
 
   // 서버 알림설정 로드
   useEffect(() => {
@@ -163,7 +166,50 @@ export default function ProfileEditAlarm() {
         if (Number.isFinite(h) && Number.isFinite(m)) setStart({ h, m });
       }
     });
+
+    // 저장된 deviceId 복원
+    try {
+      const saved = localStorage.getItem("routia.pushDeviceId");
+      if (saved) setDeviceId(Number(saved));
+    } catch { /* 무시 */ }
   }, []);
+
+  const handleToggle = async () => {
+    const userId = getCurrentUserId();
+    const newEnabled = !enabled;
+    setEnabled(newEnabled);
+
+    if (userId == null) return;
+
+    if (newEnabled) {
+      // 알림 ON → FCM 토큰 획득 → 기기 등록
+      const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? "";
+      const token = await requestFcmToken(vapidKey);
+      if (token) {
+        try {
+          const res = await registerPushDevice(userId, {
+            installationId: token,
+            platform: "WEB",
+          });
+          setDeviceId(res.id);
+          try { localStorage.setItem("routia.pushDeviceId", String(res.id)); } catch { /* */ }
+        } catch {
+          /* 등록 실패 시 무시 */
+        }
+      }
+    } else {
+      // 알림 OFF → 기기 비활성화
+      if (deviceId != null) {
+        try {
+          await deactivatePushDevice(userId, deviceId);
+          setDeviceId(null);
+          try { localStorage.removeItem("routia.pushDeviceId"); } catch { /* */ }
+        } catch {
+          /* 비활성화 실패 시 무시 */
+        }
+      }
+    }
+  };
 
   const handleSave = async () => {
     const userId = getCurrentUserId();
@@ -183,7 +229,7 @@ export default function ProfileEditAlarm() {
       {/* 사용여부 */}
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold text-textColor">사용여부</span>
-        <Toggle on={enabled} onToggle={() => setEnabled((v) => !v)} />
+        <Toggle on={enabled} onToggle={handleToggle} />
       </div>
       <p className="text-xs text-subtextColor -mt-2">루틴 알림을 받을지 선택해주세요</p>
 
