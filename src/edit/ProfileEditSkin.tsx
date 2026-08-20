@@ -6,6 +6,8 @@ import {
   BODY_CONCERN_LABEL_BY_CODE,
   BODY_GOAL_BY_LABEL,
   BODY_GOAL_LABEL_BY_CODE,
+  OWNED_TOOL_BY_LABEL,
+  OWNED_TOOL_LABEL_BY_CODE,
   SKIN_CONCERN_BY_LABEL,
   SKIN_CONCERN_LABEL_BY_CODE,
   SKIN_TYPE_BY_LABEL,
@@ -23,6 +25,7 @@ export default function ProfileEditSkin() {
   const [form, setForm] = useState({
     skinType: "",
     skinConcern: [] as string[],
+    ownedTools: [] as string[],
     usedProducts: "", // API에 대응 필드 없음 — 화면 전용
     bodyConcern: [] as string[],
     bodyConcernEtc: "",
@@ -42,6 +45,7 @@ export default function ProfileEditSkin() {
         ...prev,
         skinType: n.skinType ? (SKIN_TYPE_LABEL_BY_CODE[n.skinType] ?? prev.skinType) : prev.skinType,
         skinConcern: mapCodesToLabels(n.skinConcerns, SKIN_CONCERN_LABEL_BY_CODE),
+        ownedTools: mapCodesToLabels(n.ownedTools, OWNED_TOOL_LABEL_BY_CODE),
         bodyConcern: mapCodesToLabels(n.bodyConcerns, BODY_CONCERN_LABEL_BY_CODE),
         goals: mapCodesToLabels(n.bodyGoals, BODY_GOAL_LABEL_BY_CODE),
       }));
@@ -56,6 +60,7 @@ export default function ProfileEditSkin() {
       skinConcerns: mapLabels(form.skinConcern, SKIN_CONCERN_BY_LABEL).slice(0, 3),
       bodyConcerns: mapLabels(form.bodyConcern, BODY_CONCERN_BY_LABEL).slice(0, 3),
       bodyGoals: goals.length > 0 ? goals : ["BUILD_HABIT"],
+      ownedTools: mapLabels(form.ownedTools, OWNED_TOOL_BY_LABEL).slice(0, 4),
     };
     if (form.skinType && SKIN_TYPE_BY_LABEL[form.skinType]) {
       body.skinType = SKIN_TYPE_BY_LABEL[form.skinType];
@@ -82,6 +87,14 @@ export default function ProfileEditSkin() {
         value={form.skinConcern}
         onChange={(v) => update("skinConcern", v)}
         itemClassName="w-[72px] h-[41px]"
+      />
+
+      <MultiChipSelect
+        label="보유 도구"
+        hint="(복수 선택 가능, 최대 4개)"
+        options={["스킨케어 흡수 디바이스", "바디 근막이완 도구", "얼굴 근막이완 도구", "각질 제거 제품"]}
+        value={form.ownedTools}
+        onChange={(v) => update("ownedTools", v)}
       />
 
       <TextField

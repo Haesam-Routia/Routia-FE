@@ -65,6 +65,13 @@ export const BODY_GOAL_BY_LABEL: Record<string, BodyGoal> = {
   "규칙적인 생활": "REGULAR_LIFE",
 };
 
+export const OWNED_TOOL_BY_LABEL: Record<string, OwnedTool> = {
+  "스킨케어 흡수 디바이스": "SKINCARE_ABSORPTION_DEVICE",
+  "바디 근막이완 도구": "BODY_FASCIA_TOOL",
+  "얼굴 근막이완 도구": "FACE_FASCIA_TOOL",
+  "각질 제거 제품": "EXFOLIATING_PRODUCT",
+};
+
 export const OWNED_TOOL_BY_VALUE: Record<string, OwnedTool> = {
   absorb: "SKINCARE_ABSORPTION_DEVICE",
   body: "BODY_FASCIA_TOOL",
@@ -139,6 +146,12 @@ export const BODY_GOAL_LABEL_BY_CODE: Record<string, string> = {
   FAT_LOSS: "체지방 줄이기",
   BUILD_HABIT: "습관 잡기",
   REGULAR_LIFE: "규칙적인 생활",
+};
+export const OWNED_TOOL_LABEL_BY_CODE: Record<string, string> = {
+  SKINCARE_ABSORPTION_DEVICE: "스킨케어 흡수 디바이스",
+  BODY_FASCIA_TOOL: "바디 근막이완 도구",
+  FACE_FASCIA_TOOL: "얼굴 근막이완 도구",
+  EXFOLIATING_PRODUCT: "각질 제거 제품",
 };
 export const TIME_PREF_LABEL_BY_CODE: Record<string, string> = {
   MORNING: "아침형",
