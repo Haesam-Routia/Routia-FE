@@ -71,7 +71,7 @@ export default function ProfileEditSkin() {
         options={["건성", "중성", "지성", "복합성", "민감성", "수부지"]}
         value={form.skinType}
         onChange={(v) => update("skinType", v)}
-        itemClassName="w-[60px] h-[41px]"
+        itemClassName="w-[72px] h-[41px]"
       />
 
       <MultiChipSelect
@@ -81,7 +81,7 @@ export default function ProfileEditSkin() {
         options={["탄력", "주름", "여드름", "색소", "모공", "피지"]}
         value={form.skinConcern}
         onChange={(v) => update("skinConcern", v)}
-        itemClassName="w-[60px] h-[41px]"
+        itemClassName="w-[72px] h-[41px]"
       />
 
       <TextField

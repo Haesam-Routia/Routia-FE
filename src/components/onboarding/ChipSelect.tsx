@@ -33,7 +33,7 @@ export default function ChipSelect({
               key={opt}
               type="button"
               onClick={() => onChange?.(opt)}
-              className={`rounded-full border-[1.5px] text-[13.5px] font-bold transition-all duration-150 flex items-center justify-center gap-1.5 ${itemClassName || "px-4 py-[9px]"} ${
+              className={`rounded-full border-[1.5px] text-[13.5px] font-bold whitespace-nowrap transition-all duration-150 flex items-center justify-center gap-1.5 ${itemClassName || "px-4 py-[9px]"} ${
                 selected
                   ? "border-ob-primary bg-gradient-to-b from-ob-primary-soft to-[#FFD3D8] text-ob-primary-text shadow-[inset_0_0_0_1px_rgba(255,107,122,0.3),0_3px_8px_-3px_rgba(219,74,94,0.35)]"
                   : "border-ob-border-strong bg-ob-surface text-ob-ink hover:border-ob-primary hover:-translate-y-[1px]"
