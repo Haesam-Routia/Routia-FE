@@ -101,13 +101,6 @@ export default function ProgressCard({ progress, onDetail }: ProgressCardProps) 
       >
         설명 보기
       </button>
-      <button
-        type="button"
-        onClick={onDetail}
-        className="flex h-13 w-full items-center justify-center gap-1.5 rounded-2xl bg-buttonColor text-sm font-semibold text-white"
-      >
-        AI 코치
-      </button>
       </div>
     </div>
   );
