@@ -128,7 +128,7 @@ export default function TodayDirectionCard({
                   </span>
                 </div>
                 <ul className="flex flex-col gap-2 pl-0.5">
-                  {section.items.map((item) => (
+                  {section.items.slice(0, 1).map((item) => (
                     <li
                       key={item.itemId}
                       className="flex gap-2 text-[12.5px] leading-snug text-textColor"
