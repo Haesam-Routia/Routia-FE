@@ -1,5 +1,5 @@
 import type { WeatherInfo } from "../../data/home";
-import { SunIcon, UvIcon } from "./WeatherIcons";
+import { WeatherIcon, UvIcon } from "./WeatherIcons";
 
 interface WeatherCardProps {
   weather: WeatherInfo;
@@ -28,7 +28,7 @@ export default function WeatherCard({ weather }: WeatherCardProps) {
       <div className="flex items-stretch">
         {/* 날씨 */}
         <div className="flex flex-1 items-center gap-3">
-          <SunIcon />
+          <WeatherIcon condition={weather.condition} />
           <div className="leading-tight">
             <div className="flex items-baseline gap-1">
               {/* 온도 16px / 700 */}
