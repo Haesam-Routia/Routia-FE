@@ -9,6 +9,26 @@ interface TodayDirectionCardProps {
   onClose?: () => void;
 }
 
+/**
+ * 긴 title 문장을 짧은 요약 타이틀로 줄인다.
+ * "오늘은~" 조언 부분을 헤드라인으로 잡고(날씨 서두 생략),
+ * 첫 문장 → 너무 길면 첫 쉼표까지 → 그래도 길면 26자 부근 어절 경계에서 자르고 "…".
+ */
+function summarizeTitle(text: string): string {
+  let s = (text.split(/(?<=[.!?])\s+/)[0] ?? text).trim();
+
+  const idx = s.indexOf("오늘은");
+  if (idx > 0) s = s.slice(idx);
+  if (s.length <= 26) return s;
+
+  const comma = s.indexOf(",");
+  if (comma > 6 && comma <= 28) return s.slice(0, comma).trim();
+
+  const cut = s.slice(0, 26);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > 10 ? cut.slice(0, lastSpace) : cut).trim()}…`;
+}
+
 /** 카드 공통 프레임 (위치·크기·그림자). */
 const FRAME =
   "absolute left-1/2 top-[30px] z-30 flex h-[656px] w-[362px] -translate-x-1/2 flex-col " +
@@ -88,8 +108,8 @@ export default function TodayDirectionCard({
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-mainColor to-mainLightColor">
             <span className="text-[56px] leading-none">{direction.emoji}</span>
           </div>
-          <h2 className="mt-4 text-center text-[19px] font-bold text-textColor">
-            {direction.title}
+          <h2 className="mt-4 text-center text-[18px] font-bold leading-snug text-textColor">
+            {summarizeTitle(direction.title)}
           </h2>
           <p className="mt-2 text-center text-[13px] leading-relaxed text-subtextColor">
             {direction.description}
