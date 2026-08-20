@@ -1,7 +1,7 @@
 // Firebase 초기화 및 Messaging 인스턴스 제공.
 // 환경변수(VITE_FIREBASE_*)로 설정값을 주입하세요.
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, type Messaging } from "firebase/messaging";
+import { getMessaging, onRegistered, register, type Messaging } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? "",
@@ -23,31 +23,53 @@ export function getFirebaseMessaging(): Messaging | null {
   return messaging;
 }
 
-/** FCM 토큰(Installation ID) 획득. 브라우저 알림 권한 요청 포함. */
-export async function requestFcmToken(vapidKey: string): Promise<string | null> {
+/**
+ * register() 호출 후 onRegistered() 콜백으로 전달되는
+ * Firebase Installation ID(FID)를 기다려 반환한다. (백엔드는 registration token이 아닌 FID 사용)
+ */
+function waitForFid(
+  m: Messaging,
+  serviceWorkerRegistration: ServiceWorkerRegistration,
+  vapidKey: string,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let unsubscribe = () => {};
+    const timeout = window.setTimeout(() => {
+      unsubscribe();
+      reject(new Error("FCM 기기 등록 시간이 초과되었습니다."));
+    }, 15000);
+
+    // register()보다 listener를 먼저 연결해야 함
+    unsubscribe = onRegistered(m, (fid) => {
+      window.clearTimeout(timeout);
+      unsubscribe();
+      resolve(fid);
+    });
+
+    register(m, { vapidKey, serviceWorkerRegistration }).catch((error) => {
+      window.clearTimeout(timeout);
+      unsubscribe();
+      reject(error);
+    });
+  });
+}
+
+/**
+ * 알림 권한 요청 → Service Worker 등록 → register()/onRegistered()로 FID 획득.
+ * 실패 시 사유와 함께 throw 하므로 호출부에서 성공 여부를 판별할 수 있다.
+ */
+export async function requestFcmFid(vapidKey: string): Promise<string> {
   const m = getFirebaseMessaging();
-  if (!m) {
-    console.warn("[Routia] Messaging 인스턴스 생성 불가 (브라우저 미지원)");
-    return null;
-  }
+  if (!m) throw new Error("이 브라우저는 웹 푸시를 지원하지 않습니다.");
+  if (!vapidKey) throw new Error("푸시 설정(VAPID 키)이 누락되었습니다.");
 
-  try {
-    const permission = await Notification.requestPermission();
-    console.log("[Routia] 알림 권한 상태:", permission);
-    if (permission !== "granted") return null;
-  } catch (err) {
-    console.error("[Routia] 알림 권한 요청 실패:", err);
-    return null;
-  }
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") throw new Error("브라우저 알림 권한이 필요합니다.");
 
-  try {
-    const sw = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
-    console.log("[Routia] Service Worker 등록 성공");
-    const token = await getToken(m, { vapidKey, serviceWorkerRegistration: sw });
-    console.log("[Routia] FCM 토큰 획득:", token ? token.slice(0, 20) + "..." : "null");
-    return token || null;
-  } catch (err) {
-    console.error("[Routia] FCM 토큰 획득 실패:", err);
-    return null;
-  }
+  const serviceWorkerRegistration = await navigator.serviceWorker.register(
+    "/firebase-messaging-sw.js",
+    { scope: "/" },
+  );
+
+  return waitForFid(m, serviceWorkerRegistration, vapidKey);
 }

@@ -7,7 +7,7 @@ import {
 } from "../api";
 import { registerPushDevice, deactivatePushDevice } from "../api/notifications";
 import { tryApi } from "../api/netguard";
-import { requestFcmToken } from "../firebase";
+import { requestFcmFid } from "../firebase";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const ITEM_H = 40;
@@ -174,57 +174,45 @@ export default function ProfileEditAlarm() {
     } catch { /* 무시 */ }
   }, []);
 
-  const handleToggle = async () => {
-    const userId = getCurrentUserId();
-    const newEnabled = !enabled;
-    setEnabled(newEnabled);
+  // 토글은 상태만 변경한다. 실제 기기 등록/알림설정은 저장 시 일괄 처리한다.
+  const handleToggle = () => setEnabled((v) => !v);
 
-    if (userId == null) return;
-
-    if (newEnabled) {
-      // 알림 ON → FCM 토큰 획득 → 기기 등록
-      const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? "";
-      console.log("[Routia] FCM 토큰 요청 시작, vapidKey:", vapidKey ? "설정됨" : "없음");
-      const token = await requestFcmToken(vapidKey);
-      console.log("[Routia] FCM 토큰 결과:", token ? "성공" : "실패(null)");
-      if (token) {
-        try {
-          const res = await registerPushDevice(userId, {
-            installationId: token,
-            platform: "WEB",
-          });
-          console.log("[Routia] 기기 등록 성공, deviceId:", res.id);
-          setDeviceId(res.id);
-          try { localStorage.setItem("routia.pushDeviceId", String(res.id)); } catch { /* */ }
-        } catch (err) {
-          console.error("[Routia] 기기 등록 실패:", err);
-        }
-      }
-    } else {
-      // 알림 OFF → 기기 비활성화
-      if (deviceId != null) {
-        try {
-          await deactivatePushDevice(userId, deviceId);
-          setDeviceId(null);
-          try { localStorage.removeItem("routia.pushDeviceId"); } catch { /* */ }
-        } catch {
-          /* 비활성화 실패 시 무시 */
-        }
-      }
-    }
-  };
-
+  /**
+   * 저장 시 실행. 전 과정이 성공해야만 정상 종료(→ 성공 모달).
+   * 알림 ON: 권한→SW→register()→onRegistered() FID→POST push-devices→PATCH notification-settings.
+   * 실패 시 throw 하여 호출부(EditLayout)가 에러 모달을 띄운다.
+   */
   const handleSave = async () => {
     const userId = getCurrentUserId();
-    if (userId == null) return;
-    await tryApi(
-      () =>
-        updateNotificationSettings(userId, {
-          notificationEnabled: enabled,
-          notificationTime: enabled ? `${pad(start.h)}:${pad(start.m)}` : null,
-        }),
-      null,
-    );
+    if (userId == null) throw new Error("로그인이 필요합니다. 다시 로그인해 주세요.");
+
+    if (enabled) {
+      // 1) 권한 → SW 등록 → register()/onRegistered()로 FID 획득
+      const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? "";
+      const fid = await requestFcmFid(vapidKey);
+
+      // 2) 기기 등록 (installationId = FID)
+      const res = await registerPushDevice(userId, { installationId: fid, platform: "WEB" });
+      setDeviceId(res.id);
+      try { localStorage.setItem("routia.pushDeviceId", String(res.id)); } catch { /* */ }
+
+      // 3) 알림 설정 ON
+      await updateNotificationSettings(userId, {
+        notificationEnabled: true,
+        notificationTime: `${pad(start.h)}:${pad(start.m)}`,
+      });
+    } else {
+      // 알림 OFF → 설정 저장 + 기기 비활성화
+      await updateNotificationSettings(userId, {
+        notificationEnabled: false,
+        notificationTime: null,
+      });
+      if (deviceId != null) {
+        try { await deactivatePushDevice(userId, deviceId); } catch { /* 비활성화 실패는 무시 */ }
+        setDeviceId(null);
+        try { localStorage.removeItem("routia.pushDeviceId"); } catch { /* */ }
+      }
+    }
   };
 
   return (
