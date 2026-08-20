@@ -171,7 +171,7 @@ export default function SignupForm() {
             <button
               type="button"
               onClick={() => navigate("/signup/password", { state: { nickname, email } })}
-              className="mt-6 h-[50px] w-[202px] rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
+              className="mt-6 h-[50px] w-[202px] rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
             >
               회원가입으로 돌아가기
             </button>

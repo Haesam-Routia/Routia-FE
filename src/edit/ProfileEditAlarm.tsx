@@ -119,7 +119,7 @@ function TimePickerSheet({
         <button
           type="button"
           onClick={handleConfirm}
-          className="mt-5 flex h-12 w-full items-center justify-center rounded-xl bg-buttonColor text-sm font-semibold text-white"
+          className="mt-5 flex h-12 w-full items-center justify-center rounded-xl bg-buttonColor text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
         >
           확인
         </button>

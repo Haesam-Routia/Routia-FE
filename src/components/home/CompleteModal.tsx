@@ -20,7 +20,7 @@ export default function CompleteModal({ onClose, onConfirm }: CompleteModalProps
         <button
           type="button"
           onClick={onConfirm}
-          className="mt-[29px] flex h-[50px] w-[202px] items-center justify-center rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
+          className="mt-[29px] flex h-[50px] w-[202px] items-center justify-center rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
         >
           회원가입으로 돌아가기
         </button>

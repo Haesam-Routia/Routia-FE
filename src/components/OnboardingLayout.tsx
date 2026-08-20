@@ -22,7 +22,7 @@ export function OnboardingButton({ onClick, children }: OnboardingButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      className="mt-2 h-[50px] w-full rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
+      className="mt-2 h-[50px] w-full rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
     >
       {children}
     </button>

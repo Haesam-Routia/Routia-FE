@@ -21,7 +21,7 @@ export default function SaveSuccessModal({
         <button
           type="button"
           onClick={onClose}
-          className="mt-5 h-[40px] w-full rounded-xl bg-buttonColor text-sm font-semibold text-white transition-colors active:bg-buttonPressedColor"
+          className="mt-5 h-[40px] w-full rounded-xl bg-buttonColor text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98] active:bg-buttonPressedColor"
         >
           닫기
         </button>

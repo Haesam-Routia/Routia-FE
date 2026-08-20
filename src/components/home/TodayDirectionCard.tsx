@@ -41,7 +41,7 @@ export default function TodayDirectionCard({ onClose }: TodayDirectionCardProps)
       <button
         type="button"
         onClick={onClose}
-        className="mx-auto mt-auto flex h-[50px] w-[202px] items-center justify-center rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white"
+        className="mx-auto mt-auto flex h-[50px] w-[202px] items-center justify-center rounded-xl bg-buttonColor px-4 py-3.5 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
       >
         닫기
       </button>
