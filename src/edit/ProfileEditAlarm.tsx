@@ -184,17 +184,20 @@ export default function ProfileEditAlarm() {
     if (newEnabled) {
       // 알림 ON → FCM 토큰 획득 → 기기 등록
       const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? "";
+      console.log("[Routia] FCM 토큰 요청 시작, vapidKey:", vapidKey ? "설정됨" : "없음");
       const token = await requestFcmToken(vapidKey);
+      console.log("[Routia] FCM 토큰 결과:", token ? "성공" : "실패(null)");
       if (token) {
         try {
           const res = await registerPushDevice(userId, {
             installationId: token,
             platform: "WEB",
           });
+          console.log("[Routia] 기기 등록 성공, deviceId:", res.id);
           setDeviceId(res.id);
           try { localStorage.setItem("routia.pushDeviceId", String(res.id)); } catch { /* */ }
-        } catch {
-          /* 등록 실패 시 무시 */
+        } catch (err) {
+          console.error("[Routia] 기기 등록 실패:", err);
         }
       }
     } else {

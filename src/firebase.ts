@@ -26,19 +26,28 @@ export function getFirebaseMessaging(): Messaging | null {
 /** FCM 토큰(Installation ID) 획득. 브라우저 알림 권한 요청 포함. */
 export async function requestFcmToken(vapidKey: string): Promise<string | null> {
   const m = getFirebaseMessaging();
-  if (!m) return null;
-
-  const permission = await Notification.requestPermission();
-  if (permission !== "granted") return null;
+  if (!m) {
+    console.warn("[Routia] Messaging 인스턴스 생성 불가 (브라우저 미지원)");
+    return null;
+  }
 
   try {
-    const token = await getToken(m, {
-      vapidKey,
-      serviceWorkerRegistration: await navigator.serviceWorker.register("/firebase-messaging-sw.js"),
-    });
+    const permission = await Notification.requestPermission();
+    console.log("[Routia] 알림 권한 상태:", permission);
+    if (permission !== "granted") return null;
+  } catch (err) {
+    console.error("[Routia] 알림 권한 요청 실패:", err);
+    return null;
+  }
+
+  try {
+    const sw = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+    console.log("[Routia] Service Worker 등록 성공");
+    const token = await getToken(m, { vapidKey, serviceWorkerRegistration: sw });
+    console.log("[Routia] FCM 토큰 획득:", token ? token.slice(0, 20) + "..." : "null");
     return token || null;
   } catch (err) {
-    console.warn("[Routia] FCM 토큰 획득 실패:", err);
+    console.error("[Routia] FCM 토큰 획득 실패:", err);
     return null;
   }
 }
