@@ -97,7 +97,7 @@ export default function ProgressCard({ progress, onDetail }: ProgressCardProps) 
       <button
         type="button"
         onClick={onDetail}
-        className="flex h-13 w-full items-center justify-center gap-1.5 rounded-2xl border-[1.5px] border-[#fad3d7] bg-[#FFF3F3] text-sm font-semibold text-[#f14867]"
+        className="flex h-13 w-full items-center justify-center gap-1.5 rounded-2xl bg-buttonColor text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98]"
       >
         설명 보기
       </button>
