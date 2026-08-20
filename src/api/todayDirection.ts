@@ -1,4 +1,5 @@
-import api from "./client";
+// 오늘의 방향 (홈) 엔드포인트
+import { requestData } from "./http";
 
 // --- 타입 정의 ---
 
@@ -29,17 +30,9 @@ export interface TodayDirectionData {
   sections: TodayDirectionSection[];
 }
 
-export interface TodayDirectionResponse {
-  success: boolean;
-  data: TodayDirectionData;
-  message: string;
-}
-
 // --- API 호출 ---
 
-export const getTodayDirection = async (): Promise<TodayDirectionData> => {
-  const response = await api.get<TodayDirectionResponse>(
-    "/api/v1/home/today-direction"
-  );
-  return response.data.data;
-};
+/** 오늘의 방향 조회. (봉투/JWT/오류 정규화는 requestData 가 처리) */
+export function getTodayDirection(): Promise<TodayDirectionData> {
+  return requestData<TodayDirectionData>("/api/v1/home/today-direction", { method: "GET" });
+}

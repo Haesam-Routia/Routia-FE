@@ -3,6 +3,7 @@ import {
   getTodayDirection,
   type TodayDirectionData,
 } from "../../api/todayDirection";
+import { ApiError } from "../../api";
 
 interface TodayDirectionCardProps {
   onClose?: () => void;
@@ -19,7 +20,7 @@ export default function TodayDirectionCard({
     getTodayDirection()
       .then((data) => setDirection(data))
       .catch((err) => {
-        if (err.response?.status === 404) {
+        if (err instanceof ApiError && err.status === 404) {
           setError("오늘의 루틴을 준비하고 있어요.\n잠시 후 다시 확인해 주세요.");
         } else {
           setError("데이터를 불러올 수 없습니다.");
