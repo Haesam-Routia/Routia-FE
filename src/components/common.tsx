@@ -14,7 +14,7 @@ export const sideBtnClass =
 
 // 메인 핑크 버튼 (가입하기 / 로그인)
 export const primaryBtnClass =
-  "w-full rounded-xl py-3.5 text-sm font-semibold text-white transition-colors " +
+  "w-full rounded-xl py-3.5 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98] " +
   "bg-buttonColor hover:brightness-95 disabled:bg-neutral-400";
 
 // 약관 동의 체크박스

@@ -109,7 +109,7 @@ export default function LoginForm() {
         type="button"
         onClick={handleSubmit}
         disabled={!isFilled || isSubmitting}
-        className={`mt-6 flex h-12.5 w-full shrink-0 items-center justify-center rounded-[10px] text-sm font-semibold text-white ${
+        className={`mt-6 flex h-12.5 w-full shrink-0 items-center justify-center rounded-[10px] text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98] ${
           isFilled && !isSubmitting ? "bg-buttonColor" : "bg-buttonPressedColor opacity-50"
         }`}
       >

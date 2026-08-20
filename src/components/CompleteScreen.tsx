@@ -27,7 +27,7 @@ export default function CompleteScreen({
       <button
         type="button"
         onClick={() => navigate(to)}
-        className="w-full h-14 px-4 py-3.5 bg-buttonColor rounded-xl flex justify-center items-center mt-90 cursor-pointer hover:opacity-90 active:scale-98 transition-all"
+        className="w-full h-14 px-4 py-3.5 bg-buttonColor rounded-xl flex justify-center items-center mt-90 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all duration-200"
       >
         <span className="text-white text-base font-semibold">{buttonLabel}</span>
       </button>
