@@ -127,7 +127,7 @@ export default function Step3Difficulty() {
         <button
           type="button"
           onClick={handleNext}
-          className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+          className="w-full h-14 bg-buttonColor rounded-xl flex justify-center items-center cursor-pointer hover:bg-[#FFB5BF] active:scale-[0.98] transition-all"
         >
           <span className="text-white text-base font-semibold">다음으로</span>
         </button>
