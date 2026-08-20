@@ -6,9 +6,9 @@ export default function WeeklyTrendCard({ data = mockTrend }: { data?: WeeklyTre
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    // 마운트 직후 한 프레임 뒤에 애니메이션 시작
-    const id = requestAnimationFrame(() => setAnimate(true));
-    return () => cancelAnimationFrame(id);
+    // 초기 height:0 상태가 페인트된 뒤에 애니메이션 시작
+    const id = setTimeout(() => setAnimate(true), 50);
+    return () => clearTimeout(id);
   }, []);
 
   return (
